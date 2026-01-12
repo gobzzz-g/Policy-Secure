@@ -1,0 +1,14 @@
+{
+  "name": "insurance-claims-platform",
+  "version": "1.0.0",
+  "description": "Policy Secure - AI-Powered Insurance Claims Processing Platform",
+  "scripts": {
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\" --names \"BACKEND,FRONTEND\" --prefix-colors \"blue,green\"",
+    "start:backend": "cd backend && ..\\venv\\Scripts\\python.exe -m uvicorn main:app --reload --host 127.0.0.1 --port 8000",
+    "start:frontend": "cd frontend && npm start",
+    "install:all": "cd frontend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
