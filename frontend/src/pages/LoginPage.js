@@ -1,11 +1,11 @@
 /**
- * Login Page
+ * Login Page - Premium Dark Theme
  */
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Shield, Mail, Lock, ArrowRight } from 'lucide-react';
+import { Shield, Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -40,25 +40,30 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex items-center justify-center px-4">
-      <div className="max-w-md w-full">
+    <div className="min-h-screen bg-surface-950 flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0 grid-bg" />
+      <div className="glow-orb w-[500px] h-[500px] bg-primary-600 top-[-200px] right-[-100px]" />
+      <div className="glow-orb w-[400px] h-[400px] bg-accent-violet bottom-[-200px] left-[-100px]" />
+
+      <div className="max-w-md w-full relative z-10">
         {/* Logo */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 animate-fade-in-down">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-primary-600 rounded-2xl flex items-center justify-center">
-              <Shield className="w-10 h-10 text-white" />
+            <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-accent-violet rounded-2xl flex items-center justify-center shadow-glow">
+              <Shield className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
-          <p className="text-gray-600 mt-2">Sign in to your account</p>
+          <h1 className="text-3xl font-bold text-white">Welcome Back</h1>
+          <p className="text-surface-400 mt-2">Sign in to your PolicySecure account</p>
         </div>
 
         {/* Login Form */}
-        <div className="card">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="card-premium animate-fade-in-up">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="label">
-                <Mail className="w-4 h-4 inline mr-2" />
+              <label className="label flex items-center">
+                <Mail className="w-4 h-4 mr-2 text-primary-400" />
                 Email Address
               </label>
               <input
@@ -72,8 +77,8 @@ const LoginPage = () => {
             </div>
 
             <div>
-              <label className="label">
-                <Lock className="w-4 h-4 inline mr-2" />
+              <label className="label flex items-center">
+                <Lock className="w-4 h-4 mr-2 text-primary-400" />
                 Password
               </label>
               <input
@@ -89,10 +94,16 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn btn-primary py-3 flex items-center justify-center"
+              className="w-full btn-glow py-3.5 rounded-xl flex items-center justify-center text-base"
             >
               {loading ? (
-                'Signing in...'
+                <span className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Signing in...
+                </span>
               ) : (
                 <>
                   Sign In
@@ -103,9 +114,9 @@ const LoginPage = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-surface-400">
               Don't have an account?{' '}
-              <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
+              <Link to="/register" className="text-primary-400 hover:text-primary-300 font-medium transition-colors">
                 Register here
               </Link>
             </p>
@@ -113,16 +124,17 @@ const LoginPage = () => {
         </div>
 
         {/* Quick Login (Demo Only) */}
-        <div className="mt-6 card bg-gray-50">
-          <p className="text-sm font-medium text-gray-700 mb-3">
-            🚀 Quick Login (Demo):
+        <div className="mt-6 card animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <p className="text-sm font-medium text-surface-300 mb-3 flex items-center">
+            <Sparkles className="w-4 h-4 mr-2 text-accent-amber" />
+            Quick Login (Demo)
           </p>
           <div className="grid grid-cols-2 gap-2">
             {quickLogins.map((cred, idx) => (
               <button
                 key={idx}
                 onClick={() => quickLogin(cred)}
-                className="text-xs px-3 py-2 bg-white border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors"
+                className="text-xs px-3 py-2.5 bg-surface-800/50 border border-surface-700/50 rounded-xl text-surface-300 hover:border-primary-500/30 hover:bg-primary-500/5 hover:text-primary-300 transition-all duration-200"
               >
                 {cred.role}
               </button>
@@ -130,8 +142,8 @@ const LoginPage = () => {
           </div>
         </div>
 
-        <div className="mt-4 text-center">
-          <Link to="/" className="text-sm text-gray-600 hover:text-gray-900">
+        <div className="mt-4 text-center animate-fade-in">
+          <Link to="/" className="text-sm text-surface-500 hover:text-surface-300 transition-colors">
             ← Back to home
           </Link>
         </div>

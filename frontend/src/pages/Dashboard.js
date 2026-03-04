@@ -1,5 +1,5 @@
 /**
- * Dashboard Page
+ * Dashboard Page - Premium Dark Theme
  * Role-specific dashboard displaying relevant information
  */
 
@@ -16,6 +16,7 @@ import {
   Clock,
   TrendingUp,
   Plus,
+  ArrowRight,
 } from 'lucide-react';
 import Loading from '../components/Loading';
 
@@ -56,21 +57,40 @@ const Dashboard = () => {
       rejected: { color: 'badge-danger', label: 'Rejected' },
       fraud_check: { color: 'badge-danger', label: 'Fraud Check' },
     };
-    
+
     const config = statusConfig[status] || statusConfig.draft;
     return <span className={`badge ${config.color}`}>{config.label}</span>;
   };
+
+  // Stats Card Component
+  const StatCard = ({ icon: Icon, value, label, gradient, iconColor }) => (
+    <div className="card card-hover group relative overflow-hidden">
+      <div className={`absolute -top-8 -right-8 w-24 h-24 bg-gradient-to-br ${gradient} rounded-full blur-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
+      <div className="relative z-10 flex items-center justify-between">
+        <div>
+          <p className="text-sm text-surface-400 mb-1">{label}</p>
+          <p className="text-3xl font-bold text-white">{value}</p>
+        </div>
+        <div className={`w-12 h-12 bg-gradient-to-br ${gradient} rounded-xl flex items-center justify-center shadow-lg`}>
+          <Icon className="w-6 h-6 text-white" />
+        </div>
+      </div>
+    </div>
+  );
 
   // Policyholder Dashboard
   if (isPolicyholder) {
     const activePolicies = policies?.filter((p) => p.is_active) || [];
     const pendingClaims = claims?.filter((c) => c.status === 'under_review' || c.status === 'submitted') || [];
-    
+
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 animate-fade-in">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <Link to="/claims/new" className="btn btn-primary inline-flex items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+            <p className="text-surface-400 mt-1">Welcome back, {user?.full_name}</p>
+          </div>
+          <Link to="/claims/new" className="btn-glow px-5 py-3 rounded-xl inline-flex items-center">
             <Plus className="w-5 h-5 mr-2" />
             New Claim
           </Link>
@@ -78,46 +98,32 @@ const Dashboard = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="card bg-gradient-to-br from-primary-500 to-primary-600 text-white">
-            <Shield className="w-10 h-10 mb-3 opacity-80" />
-            <p className="text-3xl font-bold mb-1">{activePolicies.length}</p>
-            <p className="text-primary-100">Active Policies</p>
-          </div>
-          
-          <div className="card bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-            <FileText className="w-10 h-10 mb-3 opacity-80" />
-            <p className="text-3xl font-bold mb-1">{claims?.length || 0}</p>
-            <p className="text-blue-100">Total Claims</p>
-          </div>
-          
-          <div className="card bg-gradient-to-br from-amber-500 to-amber-600 text-white">
-            <Clock className="w-10 h-10 mb-3 opacity-80" />
-            <p className="text-3xl font-bold mb-1">{pendingClaims.length}</p>
-            <p className="text-amber-100">Pending Claims</p>
-          </div>
+          <StatCard icon={Shield} value={activePolicies.length} label="Active Policies" gradient="from-primary-500 to-primary-600" />
+          <StatCard icon={FileText} value={claims?.length || 0} label="Total Claims" gradient="from-accent-cyan to-teal-600" />
+          <StatCard icon={Clock} value={pendingClaims.length} label="Pending Claims" gradient="from-accent-amber to-orange-600" />
         </div>
 
         {/* Recent Claims */}
         <div className="card">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Recent Claims</h2>
-            <Link to="/claims" className="text-primary-600 hover:text-primary-700 text-sm font-medium">
-              View All →
+            <h2 className="text-xl font-semibold text-white">Recent Claims</h2>
+            <Link to="/claims" className="text-primary-400 hover:text-primary-300 text-sm font-medium inline-flex items-center transition-colors">
+              View All <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
           </div>
-          
+
           {claims && claims.length > 0 ? (
             <div className="space-y-3">
               {claims.slice(0, 5).map((claim) => (
                 <Link
                   key={claim.id}
                   to={`/claims/${claim.id}`}
-                  className="block p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-all"
+                  className="block p-4 bg-surface-800/30 border border-surface-700/50 rounded-xl hover:border-primary-500/30 hover:bg-primary-500/5 transition-all duration-200"
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <p className="font-medium text-gray-900">{claim.claim_number}</p>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="font-medium text-white">{claim.claim_number}</p>
+                      <p className="text-sm text-surface-400 mt-1">
                         ₹{claim.claimed_amount?.toLocaleString()}
                       </p>
                     </div>
@@ -127,10 +133,10 @@ const Dashboard = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
-              <p>No claims yet</p>
-              <Link to="/claims/new" className="text-primary-600 hover:text-primary-700 text-sm font-medium mt-2 inline-block">
+            <div className="text-center py-8">
+              <FileText className="w-12 h-12 mx-auto mb-3 text-surface-600" />
+              <p className="text-surface-400">No claims yet</p>
+              <Link to="/claims/new" className="text-primary-400 hover:text-primary-300 text-sm font-medium mt-2 inline-block transition-colors">
                 Submit your first claim
               </Link>
             </div>
@@ -144,74 +150,42 @@ const Dashboard = () => {
   if (isAdmin || isFraudInvestigator) {
     const flaggedClaims = claims?.filter((c) => c.is_flagged_for_investigation) || [];
     const pendingReview = claims?.filter((c) => c.status === 'under_review') || [];
-    
+
     return (
-      <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+      <div className="space-y-6 animate-fade-in">
+        <div>
+          <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+          <p className="text-surface-400 mt-1">Overview of claims and operations</p>
+        </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="card">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Total Claims</p>
-                <p className="text-3xl font-bold text-gray-900">{analytics?.totals?.claims || 0}</p>
-              </div>
-              <FileText className="w-10 h-10 text-primary-600" />
-            </div>
-          </div>
-          
-          <div className="card">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Flagged for Fraud</p>
-                <p className="text-3xl font-bold text-danger-600">{flaggedClaims.length}</p>
-              </div>
-              <AlertCircle className="w-10 h-10 text-danger-600" />
-            </div>
-          </div>
-          
-          <div className="card">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Pending Review</p>
-                <p className="text-3xl font-bold text-warning-600">{pendingReview.length}</p>
-              </div>
-              <Clock className="w-10 h-10 text-warning-600" />
-            </div>
-          </div>
-          
-          <div className="card">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Total Policies</p>
-                <p className="text-3xl font-bold text-success-600">{analytics?.totals?.policies || 0}</p>
-              </div>
-              <Shield className="w-10 h-10 text-success-600" />
-            </div>
-          </div>
+          <StatCard icon={FileText} value={analytics?.totals?.claims || 0} label="Total Claims" gradient="from-primary-500 to-primary-600" />
+          <StatCard icon={AlertCircle} value={flaggedClaims.length} label="Flagged for Fraud" gradient="from-accent-rose to-pink-600" />
+          <StatCard icon={Clock} value={pendingReview.length} label="Pending Review" gradient="from-accent-amber to-orange-600" />
+          <StatCard icon={Shield} value={analytics?.totals?.policies || 0} label="Total Policies" gradient="from-accent-emerald to-green-600" />
         </div>
 
         {/* Claims Requiring Attention */}
         <div className="card">
-          <h2 className="text-xl font-semibold mb-4">Claims Requiring Attention</h2>
-          
+          <h2 className="text-xl font-semibold text-white mb-4">Claims Requiring Attention</h2>
+
           {pendingReview.length > 0 ? (
             <div className="space-y-3">
               {pendingReview.slice(0, 5).map((claim) => (
                 <Link
                   key={claim.id}
                   to={`/claims/${claim.id}`}
-                  className="block p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-all"
+                  className="block p-4 bg-surface-800/30 border border-surface-700/50 rounded-xl hover:border-primary-500/30 hover:bg-primary-500/5 transition-all duration-200"
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <p className="font-medium text-gray-900">{claim.claim_number}</p>
-                      <p className="text-sm text-gray-600 mt-1">
-                        Amount: ${claim.claimed_amount?.toLocaleString()}
+                      <p className="font-medium text-white">{claim.claim_number}</p>
+                      <p className="text-sm text-surface-400 mt-1">
+                        Amount: ₹{claim.claimed_amount?.toLocaleString()}
                       </p>
                       {claim.is_flagged_for_investigation && (
-                        <span className="inline-flex items-center text-xs text-danger-600 mt-2">
+                        <span className="inline-flex items-center text-xs text-accent-rose mt-2">
                           <AlertCircle className="w-3 h-3 mr-1" />
                           Flagged for investigation
                         </span>
@@ -223,9 +197,9 @@ const Dashboard = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              <CheckCircle className="w-12 h-12 mx-auto mb-3 text-success-500" />
-              <p>All caught up! No claims pending review.</p>
+            <div className="text-center py-8">
+              <CheckCircle className="w-12 h-12 mx-auto mb-3 text-accent-emerald" />
+              <p className="text-surface-400">All caught up! No claims pending review.</p>
             </div>
           )}
         </div>
@@ -235,10 +209,10 @@ const Dashboard = () => {
 
   // Default dashboard
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Welcome, {user?.full_name}</h1>
+    <div className="space-y-6 animate-fade-in">
+      <h1 className="text-3xl font-bold text-white">Welcome, {user?.full_name}</h1>
       <div className="card">
-        <p className="text-gray-600">Your dashboard is loading...</p>
+        <p className="text-surface-400">Your dashboard is loading...</p>
       </div>
     </div>
   );
