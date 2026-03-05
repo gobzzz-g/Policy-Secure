@@ -54,8 +54,8 @@ const LoginPage = () => {
               <Shield className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-white">Welcome Back</h1>
-          <p className="text-surface-400 mt-2">Sign in to your PolicySecure account</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white">Welcome Back</h1>
+          <p className="text-surface-400 mt-2 text-sm sm:text-base">Sign in to your PolicySecure account</p>
         </div>
 
         {/* Login Form */}
@@ -129,12 +129,12 @@ const LoginPage = () => {
             <Sparkles className="w-4 h-4 mr-2 text-accent-amber" />
             Quick Login (Demo)
           </p>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {quickLogins.map((cred, idx) => (
               <button
                 key={idx}
                 onClick={() => quickLogin(cred)}
-                className="text-xs px-3 py-2.5 bg-surface-800/50 border border-surface-700/50 rounded-xl text-surface-300 hover:border-primary-500/30 hover:bg-primary-500/5 hover:text-primary-300 transition-all duration-200"
+                className="text-xs sm:text-sm px-3 py-2.5 bg-surface-800/50 border border-surface-700/50 rounded-xl text-surface-300 hover:border-primary-500/30 hover:bg-primary-500/5 hover:text-primary-300 transition-all duration-200"
               >
                 {cred.role}
               </button>

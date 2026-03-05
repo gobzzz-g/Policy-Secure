@@ -160,10 +160,10 @@ const NewClaim = () => {
   }
 
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className="space-y-4 sm:space-y-6 max-w-4xl px-2 sm:px-0">
       <div>
-        <h1 className="text-3xl font-bold">Submit New Claim</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="text-2xl sm:text-3xl font-bold">Submit New Claim</h1>
+        <p className="text-gray-600 mt-2 text-sm sm:text-base">
           Fill out the form below to submit your insurance claim
         </p>
       </div>
@@ -203,10 +203,10 @@ const NewClaim = () => {
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Policy Selection */}
-          <div className="card">
-            <h2 className="text-xl font-semibold mb-4 flex items-center">
+          <div className="card p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center">
               <FileText className="h-5 w-5 mr-2 text-blue-600" />
               Policy Information
             </h2>
@@ -219,7 +219,7 @@ const NewClaim = () => {
                 name="policy_id"
                 value={formData.policy_id}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
                 <option value="">-- Select a Policy --</option>

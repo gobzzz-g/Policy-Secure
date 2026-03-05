@@ -88,11 +88,11 @@ const Layout = ({ children }) => {
               </button>
 
               <Link to="/dashboard" className="flex items-center ml-2 lg:ml-0 group">
-                <div className="w-9 h-9 bg-gradient-to-br from-primary-500 to-accent-violet rounded-xl flex items-center justify-center shadow-glow group-hover:shadow-glow-lg transition-shadow duration-300">
-                  <Shield className="w-4 h-4 text-white" />
+                <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-violet rounded-xl flex items-center justify-center shadow-glow group-hover:shadow-glow-lg transition-shadow duration-300">
+                  <Shield className="w-5 h-5 text-white" />
                 </div>
-                <span className="ml-2.5 text-lg font-bold text-white hidden sm:block tracking-tight">
-                  Policy<span className="gradient-text">Secure</span>
+                <span className="ml-3 text-xl font-bold text-white tracking-tight" style={{ textShadow: '0 2px 10px rgba(99, 102, 241, 0.5)' }}>
+                  Policy<span className="text-primary-400" style={{ textShadow: '0 2px 15px rgba(99, 102, 241, 0.8)' }}>Secure</span>
                 </span>
               </Link>
             </div>
@@ -127,13 +127,26 @@ const Layout = ({ children }) => {
         {/* Sidebar */}
         <aside
           className={`
-            fixed lg:static inset-y-0 left-0 z-50 w-64 bg-surface-900/95 backdrop-blur-xl border-r border-white/5 transform
+            fixed lg:static inset-y-0 left-0 z-50 w-64 backdrop-blur-xl border-r border-gray-700 shadow-2xl lg:shadow-none transform
             transition-transform duration-300 ease-in-out lg:translate-x-0
             ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           `}
+          style={{ backgroundColor: '#0f172a' }}
         >
-          <div className="flex flex-col h-full pt-20 lg:pt-6 pb-4">
-            <nav className="flex-1 px-3 space-y-1">
+          <div className="flex flex-col h-full pt-20 lg:pt-6 pb-4" style={{ backgroundColor: '#0f172a' }}>
+            {/* Mobile sidebar header - visible only on mobile */}
+            <div className="lg:hidden px-4 pb-4 mb-2 border-b border-gray-600">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-violet rounded-xl flex items-center justify-center shadow-glow">
+                  <Shield className="w-5 h-5 text-white" />
+                </div>
+                <span className="ml-3 text-xl font-bold text-white tracking-tight" style={{ textShadow: '0 2px 10px rgba(99, 102, 241, 0.5)' }}>
+                  Policy<span className="text-primary-400" style={{ textShadow: '0 2px 15px rgba(99, 102, 241, 0.8)' }}>Secure</span>
+                </span>
+              </div>
+            </div>
+            
+            <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
               {navigationItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -144,8 +157,8 @@ const Layout = ({ children }) => {
                     className={`
                       flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200
                       ${isActive(item.path)
-                        ? 'bg-primary-500/10 text-primary-400 border border-primary-500/20 shadow-sm'
-                        : 'text-surface-400 hover:text-white hover:bg-white/5'
+                        ? 'bg-primary-600/20 text-primary-300 border border-primary-500/30 shadow-md'
+                        : 'text-surface-300 hover:text-white hover:bg-surface-800/80 hover:border hover:border-surface-700/50'
                       }
                     `}
                   >
@@ -163,7 +176,7 @@ const Layout = ({ children }) => {
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto min-h-[calc(100vh-4rem)]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
             {children}
           </div>
         </main>
@@ -172,7 +185,7 @@ const Layout = ({ children }) => {
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/75 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}

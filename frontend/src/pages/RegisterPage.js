@@ -51,7 +51,7 @@ const RegisterPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-surface-950 flex items-center justify-center px-4 py-8 relative overflow-hidden">
+    <div className="min-h-screen bg-surface-950 flex items-center justify-center px-3 sm:px-4 py-8 relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 grid-bg" />
       <div className="glow-orb w-[500px] h-[500px] bg-primary-600 top-[-200px] left-[-100px]" />
@@ -65,8 +65,8 @@ const RegisterPage = () => {
               <Shield className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-white">Create Account</h1>
-          <p className="text-surface-400 mt-2">Join PolicySecure platform</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white">Create Account</h1>
+          <p className="text-surface-400 mt-2 text-sm sm:text-base">Join PolicySecure platform</p>
         </div>
 
         {/* Registration Form */}

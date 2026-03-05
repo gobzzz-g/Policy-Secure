@@ -95,20 +95,20 @@ const InvestigatorDashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 px-2 sm:px-0">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold flex items-center">
-          <Shield className="h-8 w-8 mr-3 text-red-600" />
+        <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
+          <Shield className="h-6 w-6 sm:h-8 sm:w-8 mr-2 sm:mr-3 text-red-600" />
           Fraud Investigation Dashboard
         </h1>
-        <p className="text-gray-600 mt-2">
+        <p className="text-gray-600 mt-2 text-sm sm:text-base">
           Monitor and investigate high-risk claims
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
         <div className="card hover:shadow-lg transition-shadow border-2 border-blue-200">
           <div className="flex items-center justify-between">
             <div>

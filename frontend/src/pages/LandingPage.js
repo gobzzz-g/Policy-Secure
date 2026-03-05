@@ -120,10 +120,11 @@ const Navbar = () => {
   return (
     <nav
       id="navbar"
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-        ? 'bg-surface-950/80 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/10'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled || mobileOpen
+        ? 'bg-surface-950/95 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/10'
         : 'bg-transparent'
         }`}
+      style={mobileOpen && !scrolled ? { backgroundColor: '#0f172a' } : {}}
     >
       <div className="section-container">
         <div className="flex justify-between items-center h-18 py-4">
@@ -132,8 +133,8 @@ const Navbar = () => {
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-violet rounded-xl flex items-center justify-center shadow-glow group-hover:shadow-glow-lg transition-shadow duration-300">
               <Shield className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-white tracking-tight">
-              Policy<span className="gradient-text">Secure</span>
+            <span className="text-xl font-bold text-white tracking-tight" style={{ textShadow: '0 2px 10px rgba(99, 102, 241, 0.5)' }}>
+              Policy<span className="text-primary-400" style={{ textShadow: '0 2px 15px rgba(99, 102, 241, 0.8)' }}>Secure</span>
             </span>
           </Link>
 
@@ -178,20 +179,23 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="md:hidden pb-6 animate-fade-in-down">
-            <div className="flex flex-col space-y-1 mb-4">
+          <div 
+            className="md:hidden pb-6 animate-fade-in-down rounded-b-2xl" 
+            style={{ backgroundColor: '#0f172a', boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5)' }}
+          >
+            <div className="flex flex-col space-y-1 mb-4 pt-4">
               {navLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="px-4 py-3 text-surface-300 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+                  className="px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-all mx-2"
                 >
                   {link.label}
                 </a>
               ))}
             </div>
-            <div className="flex flex-col space-y-2 pt-4 border-t border-white/10">
+            <div className="flex flex-col space-y-2 pt-4 border-t border-gray-700 mx-2">
               <Link to="/login" className="btn btn-ghost text-center">Login</Link>
               <Link to="/register" className="btn btn-glow text-center">Get Started</Link>
             </div>
@@ -229,9 +233,9 @@ const HeroSection = () => {
     >
       {/* Background effects */}
       <div className="absolute inset-0 bg-surface-950 grid-bg" />
-      <div className="glow-orb w-[600px] h-[600px] bg-primary-600 top-[-200px] right-[-100px]" />
-      <div className="glow-orb w-[500px] h-[500px] bg-accent-violet top-[30%] left-[-200px]" />
-      <div className="glow-orb w-[300px] h-[300px] bg-accent-cyan bottom-[-100px] right-[20%]" />
+      <div className="glow-orb w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-primary-600 top-[-150px] right-[-150px] sm:top-[-200px] sm:right-[-100px]" />
+      <div className="glow-orb w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-accent-violet top-[30%] left-[-150px] sm:left-[-200px]" />
+      <div className="glow-orb w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] bg-accent-cyan bottom-[-100px] right-[10%] sm:right-[20%]" />
 
       {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -249,7 +253,7 @@ const HeroSection = () => {
         ))}
       </div>
 
-      <div className="section-container relative z-10 pt-32 pb-20">
+      <div className="section-container relative z-10 pt-24 sm:pt-32 pb-16 sm:pb-20 px-4">
         <div className="max-w-5xl mx-auto text-center">
           {/* Badge */}
           <div
@@ -264,7 +268,7 @@ const HeroSection = () => {
 
           {/* Headline */}
           <h1
-            className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.1] mb-6
+            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-[1.15] mb-6 px-2
               ${isInView ? 'animate-fade-in-up' : 'opacity-0'}`}
           >
             <span className="text-white">Intelligent Insurance</span>
@@ -274,12 +278,12 @@ const HeroSection = () => {
 
           {/* Subtitle */}
           <p
-            className={`text-lg md:text-xl text-surface-400 mb-8 max-w-2xl mx-auto leading-relaxed
+            className={`text-base sm:text-lg md:text-xl text-surface-400 mb-8 max-w-2xl mx-auto leading-relaxed px-4
               ${isInView ? 'animate-fade-in-up' : 'opacity-0'}`}
             style={{ animationDelay: '0.2s' }}
           >
             Streamline your entire claims lifecycle with AI-driven fraud detection,
-            automated assessments, and intelligent settlement recommendations — all in one platform.
+            and intelligent settlement recommendations all in one platform.
           </p>
 
           {/* Rotating feature highlight */}
@@ -1049,7 +1053,7 @@ const Footer = () => {
 /* ========== Main Landing Page ========== */
 const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-surface-950 relative">
+    <div className="min-h-screen bg-surface-950 relative overflow-x-hidden w-full">
       <Navbar />
       <HeroSection />
       <StatsSection />

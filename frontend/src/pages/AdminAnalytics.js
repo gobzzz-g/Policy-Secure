@@ -18,10 +18,10 @@ const AdminAnalytics = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Analytics Dashboard</h1>
+    <div className="space-y-4 sm:space-y-6 px-2 sm:px-0">
+      <h1 className="text-2xl sm:text-3xl font-bold">Analytics Dashboard</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         <div className="card">
           <Users className="w-8 h-8 text-primary-600 mb-2" />
           <p className="text-2xl font-bold">{analytics?.totals?.users}</p>
