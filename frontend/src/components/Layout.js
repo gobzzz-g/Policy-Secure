@@ -92,7 +92,7 @@ const Layout = ({ children }) => {
                   <Shield className="w-4 h-4 text-white" />
                 </div>
                 <span className="ml-2.5 text-lg font-bold text-white hidden sm:block tracking-tight">
-                  Policy<span className="gradient-text">Secure</span>
+                  Policy<span className="gradient-text pr-1">Secure</span>
                 </span>
               </Link>
             </div>
