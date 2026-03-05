@@ -133,7 +133,7 @@ const Navbar = () => {
               <Shield className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-bold text-white tracking-tight">
-              Policy<span className="gradient-text pr-1">Secure</span>
+              Policy<span className="gradient-text">Secure</span>
             </span>
           </Link>
 
@@ -279,7 +279,7 @@ const HeroSection = () => {
             style={{ animationDelay: '0.2s' }}
           >
             Streamline your entire claims lifecycle with AI-driven fraud detection,
-            and intelligent settlement recommendations all in one platform.
+            automated assessments, and intelligent settlement recommendations — all in one platform.
           </p>
 
           {/* Rotating feature highlight */}
@@ -985,7 +985,7 @@ const Footer = () => {
                 <Shield className="w-4 h-4 text-white" />
               </div>
               <span className="text-lg font-bold text-white">
-                Policy<span className="gradient-text pr-1">Secure</span>
+                Policy<span className="gradient-text">Secure</span>
               </span>
             </div>
             <p className="text-sm text-surface-500 leading-relaxed mb-6">
