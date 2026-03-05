@@ -1,0 +1,77 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function hasRole(role) {
+      return request.auth.token.role == role;
+    }
+    
+    function isOfficerOrAdmin() {
+      return hasRole('claims_officer') || hasRole('admin') || hasRole('fraud_investigator');
+    }
+    
+    function isValidImageFile() {
+      return request.resource.contentType.matches('image/.*') &&
+             request.resource.size < 10 * 1024 * 1024; // 10MB max
+    }
+    
+    function isValidDocumentFile() {
+      return (request.resource.contentType.matches('image/.*') ||
+              request.resource.contentType.matches('application/pdf') ||
+              request.resource.contentType.matches('application/msword') ||
+              request.resource.contentType.matches('application/vnd.openxmlformats-officedocument.*')) &&
+             request.resource.size < 25 * 1024 * 1024; // 25MB max
+    }
+    
+    // User profile photos
+    match /users/{userId}/profile/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isOwner(userId) && isValidImageFile();
+      allow delete: if isOwner(userId);
+    }
+    
+    // Claim documents
+    match /claims/{claimId}/documents/{fileName} {
+      allow read: if isAuthenticated() && (isOwner(userId) || isOfficerOrAdmin());
+      allow write: if isAuthenticated() && isValidDocumentFile();
+      allow delete: if isOfficerOrAdmin();
+    }
+    
+    // Claim images (photos of damage, etc.)
+    match /claims/{claimId}/images/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isValidImageFile();
+      allow delete: if isOfficerOrAdmin();
+    }
+    
+    // Policy documents
+    match /policies/{policyId}/documents/{fileName} {
+      allow read: if isAuthenticated() && (isOwner(userId) || isOfficerOrAdmin());
+      allow write: if isOfficerOrAdmin() && isValidDocumentFile();
+      allow delete: if isOfficerOrAdmin();
+    }
+    
+    // Medical bills
+    match /claims/{claimId}/medical/{fileName} {
+      allow read: if isAuthenticated() && (isOwner(userId) || isOfficerOrAdmin());
+      allow write: if isAuthenticated() && isValidDocumentFile();
+      allow delete: if isOfficerOrAdmin();
+    }
+    
+    // Investigation evidence (fraud investigators only)
+    match /investigations/{investigationId}/evidence/{fileName} {
+      allow read: if isOfficerOrAdmin();
+      allow write: if hasRole('fraud_investigator') || hasRole('admin');
+      allow delete: if hasRole('admin');
+    }
+  }
+}

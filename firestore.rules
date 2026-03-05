@@ -1,0 +1,102 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function hasRole(role) {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == role;
+    }
+    
+    function isAdmin() {
+      return hasRole('admin');
+    }
+    
+    function isOfficer() {
+      return hasRole('claims_officer') || isAdmin();
+    }
+    
+    function isInvestigator() {
+      return hasRole('fraud_investigator') || isAdmin();
+    }
+    
+    function isPolicyholder() {
+      return hasRole('policyholder');
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (isOwner(userId) || isAdmin());
+      allow create: if isAuthenticated();
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Policies collection
+    match /policies/{policyId} {
+      allow read: if isAuthenticated() && 
+                     (resource.data.userId == request.auth.uid || isOfficer());
+      allow create: if isAuthenticated() && isPolicyholder();
+      allow update: if isOfficer() || 
+                       (isPolicyholder() && resource.data.userId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+    
+    // Claims collection
+    match /claims/{claimId} {
+      allow read: if isAuthenticated() && 
+                     (resource.data.userId == request.auth.uid || 
+                      isOfficer() || 
+                      isInvestigator());
+      allow create: if isAuthenticated() && isPolicyholder();
+      allow update: if isOfficer() || isInvestigator() ||
+                       (isPolicyholder() && resource.data.userId == request.auth.uid);
+      allow delete: if isAdmin();
+      
+      // Subcollection for claim timeline
+      match /timeline/{timelineId} {
+        allow read: if isAuthenticated();
+        allow write: if isOfficer() || isInvestigator();
+      }
+    }
+    
+    // Fraud reports collection
+    match /fraud_reports/{reportId} {
+      allow read: if isAuthenticated() && (isInvestigator() || isAdmin());
+      allow create: if isAuthenticated() && (isOfficer() || isInvestigator());
+      allow update: if isInvestigator() || isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Settlement results collection
+    match /settlement_results/{settlementId} {
+      allow read: if isAuthenticated() && 
+                     (resource.data.userId == request.auth.uid || isOfficer());
+      allow create, update: if isOfficer();
+      allow delete: if isAdmin();
+    }
+    
+    // Documents collection (metadata)
+    match /documents/{documentId} {
+      allow read: if isAuthenticated() && 
+                     (resource.data.uploadedBy == request.auth.uid || isOfficer());
+      allow create: if isAuthenticated();
+      allow update: if isOfficer() || resource.data.uploadedBy == request.auth.uid;
+      allow delete: if isAdmin() || resource.data.uploadedBy == request.auth.uid;
+    }
+    
+    // Analytics collection (read-only for most, write for system)
+    match /analytics/{docId} {
+      allow read: if isOfficer() || isAdmin();
+      allow write: if false; // Only cloud functions can write
+    }
+  }
+}
