@@ -8,14 +8,14 @@
   * {
     @apply border-gray-200;
   }
-  
+
   html {
     scroll-behavior: smooth;
     overflow-x: hidden;
     width: 100%;
     max-width: 100vw;
   }
-  
+
   body {
     @apply bg-surface-950 text-gray-100 antialiased font-sans;
     overflow-x: hidden;
@@ -36,23 +36,24 @@
 }
 
 @layer components {
+
   /* ===== Buttons ===== */
   .btn {
     @apply px-4 py-2 rounded-xl font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
   }
-  
+
   .btn-primary {
     @apply bg-primary-600 text-white hover:bg-primary-500 active:bg-primary-700 shadow-md hover:shadow-glow;
   }
-  
+
   .btn-secondary {
     @apply bg-surface-800 text-gray-200 border border-surface-700 hover:bg-surface-700 hover:border-surface-600;
   }
-  
+
   .btn-success {
     @apply bg-success-500 text-white hover:bg-success-700;
   }
-  
+
   .btn-danger {
     @apply bg-danger-500 text-white hover:bg-danger-700;
   }
@@ -62,11 +63,9 @@
   }
 
   .btn-glow {
-    @apply bg-gradient-to-r from-primary-600 to-accent-violet text-white font-semibold
-    shadow-lg hover:shadow-glow-lg transition-all duration-300
-    hover:-translate-y-0.5 active:translate-y-0;
+    @apply bg-gradient-to-r from-primary-600 to-accent-violet text-white font-semibold shadow-lg hover:shadow-glow-lg transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0;
   }
-  
+
   /* ===== Cards ===== */
   .card {
     @apply bg-surface-800/50 backdrop-blur-sm rounded-2xl border border-surface-700/50 p-6;
@@ -81,45 +80,42 @@
   }
 
   .card-premium {
-    @apply bg-gradient-to-br from-surface-800/80 to-surface-900/80 backdrop-blur-xl 
-    rounded-2xl border border-surface-700/50 p-8 shadow-premium;
+    @apply bg-gradient-to-br from-surface-800/80 to-surface-900/80 backdrop-blur-xl rounded-2xl border border-surface-700/50 p-8 shadow-premium;
   }
-  
+
   /* ===== Inputs ===== */
   .input {
-    @apply w-full px-4 py-3 bg-surface-800/50 border border-surface-700 rounded-xl 
-    text-white placeholder-surface-400 
-    focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all;
+    @apply w-full px-4 py-3 bg-surface-800/50 border border-surface-700 rounded-xl text-white placeholder-surface-400 focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all;
   }
-  
+
   .label {
     @apply block text-sm font-medium text-gray-300 mb-2;
   }
-  
+
   /* ===== Badges ===== */
   .badge {
     @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase;
   }
-  
+
   .badge-success {
     @apply bg-emerald-500/10 text-emerald-400 border border-emerald-500/20;
   }
-  
+
   .badge-warning {
     @apply bg-amber-500/10 text-amber-400 border border-amber-500/20;
   }
-  
+
   .badge-danger {
     @apply bg-rose-500/10 text-rose-400 border border-rose-500/20;
   }
-  
+
   .badge-info {
     @apply bg-primary-500/10 text-primary-400 border border-primary-500/20;
   }
 
   /* ===== Section Styles ===== */
   .section-padding {
-    @apply py-24 lg:py-32;
+    @apply py-12 lg:py-16;
   }
 
   .section-container {
@@ -148,12 +144,13 @@
     .btn {
       @apply min-h-[44px] min-w-[44px];
     }
-    
-    button, a {
+
+    button,
+    a {
       -webkit-tap-highlight-color: transparent;
       tap-highlight-color: transparent;
     }
-    
+
     .card {
       @apply p-4;
     }
@@ -200,7 +197,9 @@
 
 /* ===== AnimatedCounter keyframes ===== */
 @keyframes countUp {
-  from { --num: 0; }
+  from {
+    --num: 0;
+  }
 }
 
 /* ===== Gradient border ===== */
@@ -215,8 +214,8 @@
   border-radius: inherit;
   padding: 1px;
   background: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4);
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -225,7 +224,7 @@
 
 /* ===== Grid background ===== */
 .grid-bg {
-  background-image: 
+  background-image:
     linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
   background-size: 60px 60px;

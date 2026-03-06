@@ -4,10 +4,9 @@
  */
 
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const functions = require('firebase-functions');
 
-// Initialize Gemini AI
-const genAI = new GoogleGenerativeAI(functions.config().gemini?.api_key || process.env.GEMINI_API_KEY || '');
+// Initialize Gemini AI with environment variable
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 /**
  * Analyze claim using Gemini AI

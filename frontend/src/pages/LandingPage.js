@@ -179,8 +179,8 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div 
-            className="md:hidden pb-6 animate-fade-in-down rounded-b-2xl" 
+          <div
+            className="md:hidden pb-6 animate-fade-in-down rounded-b-2xl"
             style={{ backgroundColor: '#0f172a', boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5)' }}
           >
             <div className="flex flex-col space-y-1 mb-4 pt-4">
@@ -667,89 +667,325 @@ const ProcessSection = () => {
   );
 };
 
-/* ========== Dashboard Preview Section ========== */
-const DashboardPreview = () => {
+/* ========== AI Live Demo Section ========== */
+const AILiveDemoSection = () => {
   const { ref, isInView } = useInView();
+  const [activeStep, setActiveStep] = useState(-1);
+  const [isRunning, setIsRunning] = useState(false);
+  const [hasRun, setHasRun] = useState(false);
+  const [pulseRing, setPulseRing] = useState(0);
+
+  const pipelineSteps = [
+    {
+      icon: FileText,
+      label: 'Document Scan',
+      detail: 'Extracting data from 3 documents…',
+      result: '✓ 3 documents verified',
+      color: 'from-primary-500 to-indigo-600',
+      glowColor: '#6366f1',
+    },
+    {
+      icon: AlertTriangle,
+      label: 'Fraud Check',
+      detail: 'Running 147 fraud detection rules…',
+      result: '✓ No fraud indicators',
+      color: 'from-accent-rose to-pink-600',
+      glowColor: '#f43f5e',
+    },
+    {
+      icon: BarChart3,
+      label: 'Risk Scoring',
+      detail: 'Calculating risk across 24 parameters…',
+      result: '✓ Risk score: Low (12/100)',
+      color: 'from-accent-amber to-orange-600',
+      glowColor: '#f59e0b',
+    },
+    {
+      icon: DollarSign,
+      label: 'Settlement',
+      detail: 'Computing optimal settlement amount…',
+      result: '✓ Recommended: ₹2,45,000',
+      color: 'from-accent-emerald to-green-600',
+      glowColor: '#10b981',
+    },
+  ];
+
+  // Pulse ring animation
+  useEffect(() => {
+    if (!isRunning) return;
+    const interval = setInterval(() => {
+      setPulseRing((p) => (p + 1) % 3);
+    }, 600);
+    return () => clearInterval(interval);
+  }, [isRunning]);
+
+  // Auto-start when in view the first time
+  useEffect(() => {
+    if (isInView && !hasRun) {
+      startDemo();
+    }
+  }, [isInView]);
+
+  const startDemo = () => {
+    if (isRunning) return;
+    setIsRunning(true);
+    setHasRun(true);
+    setActiveStep(-1);
+
+    pipelineSteps.forEach((_, idx) => {
+      setTimeout(() => {
+        setActiveStep(idx);
+      }, 1200 * (idx + 1));
+    });
+
+    setTimeout(() => {
+      setIsRunning(false);
+    }, 1200 * (pipelineSteps.length + 1));
+  };
 
   return (
-    <section id="dashboard-preview" className="relative section-padding overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-surface-950 via-surface-900/30 to-surface-950" />
+    <section id="ai-demo" className="relative section-padding overflow-hidden">
+      {/* Background Orbs */}
+      <div className="glow-orb w-[500px] h-[500px] bg-primary-600 top-[-150px] left-[50%] -translate-x-1/2" />
+      <div className="glow-orb w-[300px] h-[300px] bg-accent-violet bottom-[-80px] right-[-80px]" />
 
       <div className="section-container relative z-10" ref={ref}>
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <div
-            className={`inline-flex items-center px-3 py-1 rounded-full bg-accent-violet/10 border border-accent-violet/20 mb-6
+            className={`inline-flex items-center px-3 py-1 rounded-full bg-accent-emerald/10 border border-accent-emerald/20 mb-6
               ${isInView ? 'animate-fade-in' : 'opacity-0'}`}
           >
-            <span className="text-xs font-semibold text-accent-violet uppercase tracking-wider">Product Preview</span>
+            <span className="text-xs font-semibold text-accent-emerald uppercase tracking-wider">Live Demo</span>
           </div>
           <h2
             className={`section-title ${isInView ? 'animate-fade-in-up' : 'opacity-0'}`}
           >
-            Powerful{' '}
-            <span className="gradient-text">Dashboard</span>
+            Watch AI Process a{' '}
+            <span className="gradient-text">Claim in Real-Time</span>
           </h2>
           <p
             className={`section-subtitle mt-4 ${isInView ? 'animate-fade-in-up' : 'opacity-0'}`}
             style={{ animationDelay: '0.15s' }}
           >
-            Get a bird's-eye view of your entire claims operation with real-time analytics and AI insights.
+            See how PolicySecure's Gemini-powered engine analyzes, validates, and settles claims in seconds.
           </p>
         </div>
 
-        {/* Dashboard Image */}
+        {/* Demo Container */}
         <div
-          className={`relative max-w-5xl mx-auto ${isInView ? 'animate-fade-in-up' : 'opacity-0'}`}
+          className={`max-w-5xl mx-auto ${isInView ? 'animate-fade-in-up' : 'opacity-0'}`}
           style={{ animationDelay: '0.3s' }}
         >
-          {/* Glow behind */}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary-600/20 via-accent-violet/20 to-accent-cyan/20 blur-3xl rounded-3xl scale-105" />
-
-          {/* Browser mockup */}
-          <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-            {/* Browser bar */}
-            <div className="bg-surface-800/90 backdrop-blur-md px-4 py-3 flex items-center space-x-3 border-b border-white/5">
-              <div className="flex space-x-2">
-                <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                <div className="w-3 h-3 rounded-full bg-green-500/80" />
+          <div className="relative rounded-3xl border border-white/10 bg-surface-900/60 backdrop-blur-xl overflow-hidden shadow-2xl">
+            {/* Terminal-style header bar */}
+            <div className="flex items-center justify-between px-6 py-3 border-b border-white/5 bg-surface-800/50">
+              <div className="flex items-center space-x-3">
+                <div className="flex space-x-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                </div>
+                <span className="text-xs text-surface-500 font-mono">policysecure-ai-engine v2.4</span>
               </div>
-              <div className="flex-1 mx-4">
-                <div className="bg-surface-700/50 rounded-lg px-4 py-1.5 text-xs text-surface-400 flex items-center">
-                  <Lock className="w-3 h-3 mr-2 text-green-400" />
-                  app.policysecure.ai/dashboard
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${isRunning ? 'bg-accent-emerald animate-pulse' : 'bg-surface-600'}`} />
+                <span className="text-xs text-surface-500">{isRunning ? 'Processing…' : hasRun ? 'Complete' : 'Ready'}</span>
+              </div>
+            </div>
+
+            {/* Main content area */}
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
+              {/* Left: AI Neural Orb */}
+              <div className="lg:col-span-2 flex items-center justify-center py-12 px-8 relative">
+                {/* Pulsing rings */}
+                {[0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    className="absolute rounded-full border transition-all duration-700"
+                    style={{
+                      width: `${120 + i * 50}px`,
+                      height: `${120 + i * 50}px`,
+                      borderColor: isRunning && pulseRing === i
+                        ? 'rgba(99, 102, 241, 0.4)'
+                        : 'rgba(99, 102, 241, 0.08)',
+                      transform: isRunning && pulseRing === i ? 'scale(1.1)' : 'scale(1)',
+                    }}
+                  />
+                ))}
+
+                {/* Central orb */}
+                <div
+                  className="relative w-28 h-28 rounded-full flex items-center justify-center cursor-pointer group"
+                  onClick={startDemo}
+                  title="Click to run analysis"
+                  style={{
+                    background: isRunning
+                      ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%)'
+                      : activeStep >= pipelineSteps.length - 1
+                        ? 'linear-gradient(135deg, #10b981 0%, #06b6d4 100%)'
+                        : 'linear-gradient(135deg, #334155 0%, #475569 100%)',
+                    boxShadow: isRunning
+                      ? '0 0 60px rgba(99, 102, 241, 0.5), 0 0 120px rgba(139, 92, 246, 0.2)'
+                      : activeStep >= pipelineSteps.length - 1
+                        ? '0 0 60px rgba(16, 185, 129, 0.4)'
+                        : '0 0 30px rgba(99, 102, 241, 0.15)',
+                    transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }}
+                >
+                  <Brain
+                    className="w-12 h-12 text-white transition-transform duration-500"
+                    style={{
+                      transform: isRunning ? 'rotate(360deg) scale(1.1)' : 'rotate(0deg)',
+                      filter: isRunning ? 'drop-shadow(0 0 12px rgba(255,255,255,0.5))' : 'none',
+                    }}
+                  />
+
+                  {/* Click hint */}
+                  {!isRunning && (
+                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] text-surface-500 font-medium group-hover:text-primary-400 transition-colors">
+                      {hasRun ? 'Click to re-run' : 'Click to start'}
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
 
-            {/* Dashboard Image */}
-            <img
-              src="/dashboard-preview.png"
-              alt="PolicySecure Dashboard Preview"
-              className="w-full"
-              loading="lazy"
-            />
-          </div>
+              {/* Right: Pipeline Steps */}
+              <div className="lg:col-span-3 py-8 px-6 lg:px-10 border-t lg:border-t-0 lg:border-l border-white/5">
+                <div className="space-y-4">
+                  {pipelineSteps.map((step, idx) => {
+                    const Icon = step.icon;
+                    const isActive = activeStep === idx;
+                    const isCompleted = activeStep > idx;
+                    const isPending = activeStep < idx;
 
-          {/* Floating badges */}
-          <div className="absolute -right-4 top-1/4 card-glass px-4 py-3 animate-float hidden lg:flex items-center space-x-2 shadow-xl">
-            <div className="w-8 h-8 bg-accent-emerald/20 rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-4 h-4 text-accent-emerald" />
-            </div>
-            <div>
-              <div className="text-xs text-surface-400">Processing Speed</div>
-              <div className="text-sm font-bold text-accent-emerald">+340% faster</div>
-            </div>
-          </div>
+                    return (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-4 relative"
+                        style={{
+                          opacity: isPending && hasRun ? 0.35 : isPending ? 0.5 : 1,
+                          transition: 'all 0.5s ease',
+                        }}
+                      >
+                        {/* Step icon */}
+                        <div
+                          className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center relative"
+                          style={{
+                            background: isActive || isCompleted
+                              ? `linear-gradient(135deg, var(--tw-gradient-stops))`
+                              : 'rgba(30, 41, 59, 0.8)',
+                            boxShadow: isActive
+                              ? `0 0 25px ${step.glowColor}40`
+                              : 'none',
+                            transition: 'all 0.5s ease',
+                          }}
+                        >
+                          <div className={`w-full h-full rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center`}
+                            style={{
+                              opacity: isActive || isCompleted ? 1 : 0.3,
+                              transition: 'opacity 0.5s ease',
+                            }}
+                          >
+                            {isCompleted ? (
+                              <CheckCircle className="w-6 h-6 text-white" />
+                            ) : (
+                              <Icon className="w-6 h-6 text-white" />
+                            )}
+                          </div>
 
-          <div className="absolute -left-4 bottom-1/4 card-glass px-4 py-3 animate-float-slow hidden lg:flex items-center space-x-2 shadow-xl" style={{ animationDelay: '2s' }}>
-            <div className="w-8 h-8 bg-accent-violet/20 rounded-lg flex items-center justify-center">
-              <Shield className="w-4 h-4 text-accent-violet" />
-            </div>
-            <div>
-              <div className="text-xs text-surface-400">Fraud Caught</div>
-              <div className="text-sm font-bold text-accent-violet">$2.4M saved</div>
+                          {/* Active ping */}
+                          {isActive && (
+                            <div
+                              className="absolute inset-0 rounded-xl animate-ping"
+                              style={{
+                                background: `linear-gradient(135deg, ${step.glowColor}30, transparent)`,
+                                animationDuration: '1.5s',
+                              }}
+                            />
+                          )}
+                        </div>
+
+                        {/* Step content */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-white">{step.label}</span>
+                            {isActive && (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-widest text-accent-amber">
+                                <Zap className="w-3 h-3" />
+                                Processing
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs text-surface-500 mt-0.5 truncate">
+                            {isActive
+                              ? step.detail
+                              : isCompleted
+                                ? step.result
+                                : step.detail}
+                          </p>
+                        </div>
+
+                        {/* Progress bar */}
+                        <div className="hidden sm:block w-20 h-1.5 bg-surface-800 rounded-full overflow-hidden flex-shrink-0">
+                          <div
+                            className="h-full rounded-full transition-all duration-700 ease-out"
+                            style={{
+                              width: isCompleted ? '100%' : isActive ? '60%' : '0%',
+                              background: `linear-gradient(90deg, ${step.glowColor}, ${step.glowColor}aa)`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Summary card - shows after completion */}
+                <div
+                  className="mt-8 p-4 rounded-2xl border transition-all duration-700"
+                  style={{
+                    borderColor: activeStep >= pipelineSteps.length - 1 ? 'rgba(16, 185, 129, 0.3)' : 'rgba(30, 41, 59, 0.5)',
+                    background: activeStep >= pipelineSteps.length - 1
+                      ? 'rgba(16, 185, 129, 0.05)'
+                      : 'rgba(15, 23, 42, 0.5)',
+                    opacity: hasRun ? 1 : 0.5,
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${activeStep >= pipelineSteps.length - 1
+                        ? 'bg-accent-emerald/20'
+                        : 'bg-surface-800'
+                        }`}>
+                        <Sparkles className={`w-4 h-4 ${activeStep >= pipelineSteps.length - 1
+                          ? 'text-accent-emerald'
+                          : 'text-surface-600'
+                          }`} />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white">
+                          {activeStep >= pipelineSteps.length - 1
+                            ? 'Analysis Complete'
+                            : isRunning
+                              ? 'Analyzing claim…'
+                              : 'Awaiting claim data'}
+                        </div>
+                        <div className="text-[11px] text-surface-500">
+                          {activeStep >= pipelineSteps.length - 1
+                            ? 'Processed in 4.2 seconds · Confidence: 98.7%'
+                            : isRunning
+                              ? 'Gemini AI engine running…'
+                              : 'Click the AI orb to begin'}
+                        </div>
+                      </div>
+                    </div>
+                    {activeStep >= pipelineSteps.length - 1 && (
+                      <div className="badge-success badge text-[10px]">Approved</div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -952,7 +1188,7 @@ const Footer = () => {
     Product: [
       { label: 'Features', href: '#features' },
       { label: 'Pricing', href: '#stats' },
-      { label: 'Dashboard', href: '#dashboard-preview' },
+      { label: 'AI Demo', href: '#ai-demo' },
       { label: 'API Docs', href: '#' },
       { label: 'Integrations', href: '#' },
     ],
@@ -1057,9 +1293,9 @@ const LandingPage = () => {
       <Navbar />
       <HeroSection />
       <StatsSection />
-      <FeaturesSection />
+      <AILiveDemoSection />
       <ProcessSection />
-      <DashboardPreview />
+      <FeaturesSection />
       <TestimonialsSection />
       <CTASection />
       <Footer />

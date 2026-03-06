@@ -48,59 +48,20 @@ Project Root/
 
 ### ✅ Firebase CLI Status
 - **Logged in**: ✅ Yes
-- **Existing Projects**: 3 projects found
-  - audionest-4c68c
-  - gobinath-portfolio-53577
-  - loankit-ai-demo
+- **Active Project**: ✅ **policy-bae98** (Policysecure)
+- **Project Number**: 806460290165
+- **Gemini API Key**: ✅ Configured
 
 ---
 
 ## 🚀 Next Steps - YOU NEED TO DO THESE
 
-### Option 1: Create New Firebase Project
+### ✅ Step 1: Project Selected
+**Current Project**: policy-bae98 (Policysecure) - **DONE ✅**
 
-#### Via Firebase Console (Recommended)
-1. Go to https://console.firebase.google.com
-2. Click "Add project"
-3. Name it: **"PolicySecure"** or **"policy-secure-app"**
-4. Enable Google Analytics (optional)
-5. Create project
-6. Copy the Project ID (something like: `policy-secure-xxxxx`)
+### 📋 Step 2: Enable Firebase Services
 
-#### Via CLI (Alternative)
-```bash
-firebase projects:create policy-secure-app --display-name "PolicySecure"
-```
-
-### Option 2: Use Existing Project
-If you want to use one of your existing projects:
-```bash
-firebase use audionest-4c68c
-# or
-firebase use gobinath-portfolio-53577
-# or  
-firebase use loankit-ai-demo
-```
-
----
-
-## 📋 Configuration Needed
-
-### 1. Update `.firebaserc`
-
-Edit: `c:\Users\gobin\OneDrive\Pictures\Mini - Project\.firebaserc`
-
-```json
-{
-  "projects": {
-    "default": "YOUR-PROJECT-ID-HERE"
-  }
-}
-```
-
-Replace `YOUR-PROJECT-ID-HERE` with your actual Firebase project ID
-
-### 2. Enable Firebase Services
+Go to: **https://console.firebase.google.com/project/policy-bae98**
 
 In Firebase Console for your project:
 
@@ -142,35 +103,33 @@ In Firebase Console for your project:
 #### Update `frontend/.env.local`:
 ```env
 REACT_APP_FIREBASE_API_KEY=your-actual-api-key
-REACT_APP_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
-REACT_APP_FIREBASE_PROJECT_ID=your-project-id
-REACT_APP_FIREBASE_STORAGE_BUCKET=your-project-id.appspot.com
+REACT_APP_FIREBASE_AUTH_DOMAIN=policy-bae98.firebaseapp.com
+REACT_APP_FIREBASE_PROJECT_ID=policy-bae98
+REACT_APP_FIREBASE_STORAGE_BUCKET=policy-bae98.appspot.com
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
 REACT_APP_FIREBASE_APP_ID=your-app-id
 REACT_APP_FIREBASE_MEASUREMENT_ID=your-measurement-id
-REACT_APP_API_URL=http://localhost:5001/your-project-id/us-central1/api
+REACT_APP_API_URL=http://localhost:5001/policy-bae98/us-central1/api
 ```
 
 #### Update `frontend/.env.prod`:
 ```env
 # Same values but use production API URL
-REACT_APP_API_URL=https://us-central1-your-project-id.cloudfunctions.net/api
+REACT_APP_FIREBASE_API_KEY=your-actual-api-key
+REACT_APP_FIREBASE_AUTH_DOMAIN=policy-bae98.firebaseapp.com
+REACT_APP_FIREBASE_PROJECT_ID=policy-bae98
+REACT_APP_FIREBASE_STORAGE_BUCKET=policy-bae98.appspot.com
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+REACT_APP_FIREBASE_APP_ID=your-app-id
+REACT_APP_FIREBASE_MEASUREMENT_ID=your-measurement-id
+REACT_APP_API_URL=https://us-central1-policy-bae98.cloudfunctions.net/api
 ```
 
-### 4. Set Gemini API Key
+### ✅ Step 4: Gemini API Key - CONFIGURED ✅
 
-Get API key from: https://makersuite.google.com/app/apikey
-
-Then set it:
-
-```bash
-# For local development
-# Edit: functions/.env
-GEMINI_API_KEY=your-gemini-api-key-here
-
-# For production
-firebase functions:config:set gemini.api_key="your-gemini-api-key-here"
-```
+**Status**: Already configured with your API key
+- **Local Development**: `functions/.env` ✅
+- **Production**: `functions/.env.yaml` ✅
 
 ---
 
@@ -241,7 +200,7 @@ After deployment:
 
 Update `frontend/.env.prod` with actual Functions URL:
 ```env
-REACT_APP_API_URL=https://us-central1-YOUR-PROJECT-ID.cloudfunctions.net/api
+REACT_APP_API_URL=https://us-central1-policy-bae98.cloudfunctions.net/api
 ```
 
 Rebuild and redeploy:
@@ -287,21 +246,21 @@ firebase deploy --only functions
 
 ## ✅ Deployment Checklist
 
-- [ ] Firebase project created
-- [ ] Updated `.firebaserc` with project ID
-- [ ] Enabled Authentication (Email/Password)
-- [ ] Enabled Firestore Database
-- [ ] Enabled Storage
-- [ ] Enabled Functions (Upgraded to Blaze plan)
-- [ ] Got Firebase config from console
-- [ ] Updated `.env.local` with Firebase config
-- [ ] Updated `.env.prod` with Firebase config
-- [ ] Set Gemini API key
-- [ ] Tested locally with emulators
-- [ ] Built frontend (`npm run build`)
-- [ ] Deployed to Firebase (`firebase deploy`)
-- [ ] Verified deployment works
-- [ ] Created admin user
+- [x] ✅ Firebase project created (policy-bae98)
+- [x] ✅ Updated `.firebaserc` with project ID
+- [x] ✅ Gemini API key configured
+- [ ] ⏳ Enable Authentication (Email/Password) in Firebase Console
+- [ ] ⏳ Enable Firestore Database in Firebase Console
+- [ ] ⏳ Enable Storage in Firebase Console
+- [ ] ⏳ Enable Functions (Upgrade to Blaze plan) in Firebase Console
+- [ ] ⏳ Get Firebase config from console
+- [ ] ⏳ Update `.env.local` with Firebase config
+- [ ] ⏳ Update `.env.prod` with Firebase config
+- [ ] ⏳ Test locally with emulators
+- [ ] ⏳ Build frontend (`npm run build`)
+- [ ] ⏳ Deploy to Firebase (`firebase deploy`)
+- [ ] ⏳ Verify deployment works
+- [ ] ⏳ Create admin user
 
 ---
 
