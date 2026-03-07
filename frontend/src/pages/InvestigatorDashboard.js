@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Shield, AlertTriangle, Search, FileWarning, CheckCircle, 
-  XCircle, TrendingUp, Activity, Eye, ArrowRight 
+  XCircle, TrendingUp, Activity, Eye, ArrowRight, Filter, Download,
+  Clock, AlertOctagon, Target, BarChart3
 } from 'lucide-react';
 import { claimsAPI } from '../services/api';
 import Loading from '../components/Loading';
@@ -11,6 +12,8 @@ const InvestigatorDashboard = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [claims, setClaims] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [riskFilter, setRiskFilter] = useState('all');
   const [stats, setStats] = useState({
     openInvestigations: 0,
     highRisk: 0,
@@ -28,7 +31,6 @@ const InvestigatorDashboard = () => {
       setLoading(true);
       const data = await claimsAPI.list();
       
-      // Filter claims flagged for investigation or high/critical risk
       const investigationClaims = data.filter(c => 
         c.is_flagged_for_investigation || 
         c.fraud_risk_level === 'high' || 
@@ -38,7 +40,6 @@ const InvestigatorDashboard = () => {
       
       setClaims(investigationClaims);
       
-      // Calculate stats
       const openCases = investigationClaims.filter(c => 
         c.status === 'fraud_investigation'
       ).length;
@@ -75,12 +76,12 @@ const InvestigatorDashboard = () => {
 
   const getFraudRiskColor = (level) => {
     const colors = {
-      low: 'text-green-600 bg-green-100 border-green-300',
-      medium: 'text-yellow-600 bg-yellow-100 border-yellow-300',
-      high: 'text-orange-600 bg-orange-100 border-orange-300',
-      critical: 'text-red-600 bg-red-100 border-red-300'
+      low: 'bg-green-50 text-green-700 border-green-200',
+      medium: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+      high: 'bg-orange-50 text-orange-700 border-orange-200',
+      critical: 'bg-red-50 text-red-700 border-red-200'
     };
-    return colors[level] || 'text-gray-600 bg-gray-100 border-gray-300';
+    return colors[level] || 'bg-gray-50 text-gray-700 border-gray-200';
   };
 
   const getRiskScoreColor = (score) => {
@@ -90,123 +91,98 @@ const InvestigatorDashboard = () => {
     return 'text-green-600';
   };
 
+  const filteredClaims = claims.filter(claim => {
+    const matchesSearch = claim.claim_number?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRisk = riskFilter === 'all' || claim.fraud_risk_level === riskFilter;
+    return matchesSearch && matchesRisk;
+  });
+
   if (loading) {
     return <Loading />;
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6 px-2 sm:px-0">
+    <div className="space-y-6 px-2 sm:px-0">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
-          <Shield className="h-6 w-6 sm:h-8 sm:w-8 mr-2 sm:mr-3 text-red-600" />
-          Fraud Investigation Dashboard
-        </h1>
-        <p className="text-gray-600 mt-2 text-sm sm:text-base">
-          Monitor and investigate high-risk claims
-        </p>
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold flex items-center bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+            <Shield className="h-8 w-8 mr-3 text-red-600" />
+            Fraud Investigation Center
+          </h1>
+          <p className="text-gray-600 mt-1">Monitor and investigate high-risk claims with AI-powered insights</p>
+        </div>
+        <button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-2 transition-colors">
+          <Download className="w-4 h-4" />
+          Export Report
+        </button>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
-        <div className="card hover:shadow-lg transition-shadow border-2 border-blue-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Open Cases</p>
-              <p className="text-3xl font-bold text-blue-600 mt-1">{stats.openInvestigations}</p>
-            </div>
-            <div className="bg-blue-100 p-3 rounded-lg">
-              <Activity className="h-6 w-6 text-blue-600" />
-            </div>
-          </div>
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-5 text-white shadow-lg hover:shadow-xl transition-all">
+          <Activity className="w-8 h-8 mb-3 opacity-80" />
+          <p className="text-3xl font-bold">{stats.openInvestigations}</p>
+          <p className="text-sm opacity-90 mt-1">Active Cases</p>
         </div>
 
-        <div className="card hover:shadow-lg transition-shadow border-2 border-orange-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">High Risk</p>
-              <p className="text-3xl font-bold text-orange-600 mt-1">{stats.highRisk}</p>
-            </div>
-            <div className="bg-orange-100 p-3 rounded-lg">
-              <AlertTriangle className="h-6 w-6 text-orange-600" />
-            </div>
-          </div>
+        <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl p-5 text-white shadow-lg hover:shadow-xl transition-all">
+          <AlertTriangle className="w-8 h-8 mb-3 opacity-80" />
+          <p className="text-3xl font-bold">{stats.highRisk}</p>
+          <p className="text-sm opacity-90 mt-1">High Risk</p>
         </div>
 
-        <div className="card hover:shadow-lg transition-shadow border-2 border-red-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Critical Risk</p>
-              <p className="text-3xl font-bold text-red-600 mt-1">{stats.criticalRisk}</p>
-            </div>
-            <div className="bg-red-100 p-3 rounded-lg">
-              <FileWarning className="h-6 w-6 text-red-600" />
-            </div>
-          </div>
+        <div className="bg-gradient-to-br from-red-600 to-pink-600 rounded-xl p-5 text-white shadow-lg hover:shadow-xl transition-all animate-pulse">
+          <FileWarning className="w-8 h-8 mb-3 opacity-80" />
+          <p className="text-3xl font-bold">{stats.criticalRisk}</p>
+          <p className="text-sm opacity-90 mt-1">Critical</p>
         </div>
 
-        <div className="card hover:shadow-lg transition-shadow border-2 border-green-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Fraud Confirmed</p>
-              <p className="text-3xl font-bold text-green-600 mt-1">{stats.fraudConfirmed}</p>
-            </div>
-            <div className="bg-green-100 p-3 rounded-lg">
-              <CheckCircle className="h-6 w-6 text-green-600" />
-            </div>
-          </div>
+        <div className="bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl p-5 text-white shadow-lg hover:shadow-xl transition-all">
+          <CheckCircle className="w-8 h-8 mb-3 opacity-80" />
+          <p className="text-3xl font-bold">{stats.fraudConfirmed}</p>
+          <p className="text-sm opacity-90 mt-1">Confirmed</p>
         </div>
 
-        <div className="card hover:shadow-lg transition-shadow border-2 border-purple-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Avg Fraud Score</p>
-              <p className={`text-3xl font-bold mt-1 ${getRiskScoreColor(stats.averageFraudScore)}`}>
-                {stats.averageFraudScore.toFixed(1)}
-              </p>
-            </div>
-            <div className="bg-purple-100 p-3 rounded-lg">
-              <TrendingUp className="h-6 w-6 text-purple-600" />
-            </div>
-          </div>
+        <div className="bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl p-5 text-white shadow-lg hover:shadow-xl transition-all">
+          <Target className="w-8 h-8 mb-3 opacity-80" />
+          <p className="text-3xl font-bold">{stats.averageFraudScore.toFixed(0)}</p>
+          <p className="text-sm opacity-90 mt-1">Avg Risk Score</p>
         </div>
       </div>
 
-      {/* Critical Cases - Immediate Action Required */}
+      {/* Critical Alerts */}
       {claims.filter(c => c.fraud_risk_level === 'critical').length > 0 && (
-        <div className="card border-2 border-red-500 bg-red-50">
-          <div className="flex items-center space-x-2 mb-4">
-            <FileWarning className="h-6 w-6 text-red-600" />
-            <h2 className="text-xl font-semibold text-red-900">Critical: Immediate Investigation Required</h2>
+        <div className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-300 rounded-xl p-6 shadow-lg">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 bg-red-100 rounded-lg">
+              <AlertOctagon className="h-6 w-6 text-red-600 animate-pulse" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-red-900">Critical Priority: Immediate Action Required</h2>
+              <p className="text-sm text-red-700">{claims.filter(c => c.fraud_risk_level === 'critical').length} claims need urgent investigation</p>
+            </div>
           </div>
           
-          <div className="space-y-3">
-            {claims.filter(c => c.fraud_risk_level === 'critical').map(claim => (
+          <div className="grid gap-3 md:grid-cols-2">
+            {claims.filter(c => c.fraud_risk_level === 'critical').slice(0, 4).map(claim => (
               <div 
                 key={claim.id} 
-                className="flex items-center justify-between p-4 bg-white rounded-lg hover:shadow-md cursor-pointer transition-all border-2 border-red-200"
+                className="bg-white rounded-lg p-4 hover:shadow-md cursor-pointer transition-all border-2 border-red-200 hover:border-red-400"
                 onClick={() => navigate(`/claims/${claim.id}`)}
               >
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3">
+                <div className="flex items-start justify-between mb-2">
+                  <div>
                     <p className="font-bold text-gray-900">{claim.claim_number}</p>
-                    <span className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded-full">
-                      CRITICAL
-                    </span>
+                    <p className="text-xs text-gray-500 capitalize">{claim.policy?.insurance_type}</p>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">
-                    ${claim.claimed_amount.toLocaleString()} • {claim.policy?.insurance_type}
-                  </p>
-                  <p className="text-xs text-red-600 mt-1 font-medium">
-                    Fraud Score: {claim.fraud_risk_score?.toFixed(1)}/100
-                  </p>
+                  <span className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded-full">
+                    {claim.fraud_risk_score?.toFixed(0)}
+                  </span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="text-right text-sm">
-                    <p className="text-gray-500">Submitted</p>
-                    <p className="text-gray-900">{new Date(claim.submitted_at).toLocaleDateString()}</p>
-                  </div>
-                  <ArrowRight className="h-5 w-5 text-red-600" />
+                <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
+                  <p className="text-sm font-semibold text-gray-900">₹{claim.claimed_amount?.toLocaleString()}</p>
+                  <ArrowRight className="h-4 w-4 text-red-600" />
                 </div>
               </div>
             ))}
@@ -214,176 +190,110 @@ const InvestigatorDashboard = () => {
         </div>
       )}
 
-      {/* Investigation Queue */}
-      <div className="card">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">Investigation Queue</h2>
-          <div className="flex items-center space-x-3">
-            <select 
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              onChange={(e) => {
-                if (e.target.value) {
-                  const filtered = claims.filter(c => c.fraud_risk_level === e.target.value);
-                  setClaims(filtered);
-                } else {
-                  loadDashboardData();
-                }
-              }}
-            >
-              <option value="">All Risk Levels</option>
-              <option value="critical">Critical</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-            </select>
+      {/* Search and Filter */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 space-y-4">
+        <div className="flex flex-col md:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search by claim number..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            />
           </div>
         </div>
 
-        {claims.length === 0 ? (
-          <div className="text-center py-12">
-            <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">No claims requiring investigation</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Claim
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Risk Level
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Fraud Score
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Amount
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Signals
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {claims
-                  .sort((a, b) => (b.fraud_risk_score || 0) - (a.fraud_risk_score || 0))
-                  .map((claim) => (
-                  <tr 
-                    key={claim.id} 
-                    className="hover:bg-gray-50 cursor-pointer"
-                    onClick={() => navigate(`/claims/${claim.id}`)}
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <Shield className="h-5 w-5 text-red-400 mr-2" />
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">
-                            {claim.claim_number}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {claim.user?.full_name}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full border-2 ${getFraudRiskColor(claim.fraud_risk_level)}`}>
-                        {claim.fraud_risk_level?.toUpperCase()}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                          <div 
-                            className={`h-2 rounded-full ${
-                              claim.fraud_risk_score >= 75 ? 'bg-red-600' :
-                              claim.fraud_risk_score >= 50 ? 'bg-orange-600' :
-                              claim.fraud_risk_score >= 25 ? 'bg-yellow-600' :
-                              'bg-green-600'
-                            }`}
-                            style={{ width: `${claim.fraud_risk_score}%` }}
-                          ></div>
-                        </div>
-                        <span className={`text-sm font-bold ${getRiskScoreColor(claim.fraud_risk_score)}`}>
-                          {claim.fraud_risk_score?.toFixed(1)}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">
-                        ${claim.claimed_amount.toLocaleString()}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {claim.policy?.insurance_type?.replace('_', ' ').toUpperCase()}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-wrap gap-1">
-                        {claim.fraud_signals?.slice(0, 2).map((signal, idx) => (
-                          <span key={idx} className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">
-                            {signal.type}
-                          </span>
-                        ))}
-                        {claim.fraud_signals?.length > 2 && (
-                          <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                            +{claim.fraud_signals.length - 2} more
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        claim.status === 'fraud_investigation' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {claim.status?.replace('_', ' ').toUpperCase()}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/claims/${claim.id}`);
-                        }}
-                        className="text-red-600 hover:text-red-900 font-medium"
-                      >
-                        Investigate
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <div className="flex flex-wrap gap-2">
+          <Filter className="w-4 h-4 text-gray-500 mt-2" />
+          {['all', 'critical', 'high', 'medium', 'low'].map(risk => (
+            <button
+              key={risk}
+              onClick={() => setRiskFilter(risk)}
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                riskFilter === risk
+                  ? 'bg-red-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {risk.charAt(0).toUpperCase() + risk.slice(1)}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Fraud Trends (Placeholder for future chart) */}
-      <div className="card">
-        <h2 className="text-xl font-semibold mb-4">Fraud Detection Insights</h2>
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="p-4 bg-red-50 rounded-lg">
-            <p className="text-sm text-gray-600">Most Common Signal</p>
-            <p className="text-lg font-bold text-red-900 mt-2">Early Claims</p>
-            <p className="text-xs text-gray-500 mt-1">Claims filed soon after policy start</p>
-          </div>
-          <div className="p-4 bg-orange-50 rounded-lg">
-            <p className="text-sm text-gray-600">High-Risk Insurance Type</p>
-            <p className="text-lg font-bold text-orange-900 mt-2">Motor</p>
-            <p className="text-xs text-gray-500 mt-1">Highest average fraud score</p>
-          </div>
-          <div className="p-4 bg-green-50 rounded-lg">
-            <p className="text-sm text-gray-600">Detection Accuracy</p>
-            <p className="text-lg font-bold text-green-900 mt-2">87.5%</p>
-            <p className="text-xs text-gray-500 mt-1">AI prediction vs confirmed fraud</p>
+      {/* Investigation Queue */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-gray-600" />
+              Investigation Queue
+            </h2>
+            <span className="text-sm text-gray-600">{filteredClaims.length} claims</span>
           </div>
         </div>
+
+        {filteredClaims.length === 0 ? (
+          <div className="text-center py-16">
+            <CheckCircle className="h-16 w-16 text-green-400 mx-auto mb-4" />
+            <p className="text-lg font-semibold text-gray-900 mb-2">All Clear!</p>
+            <p className="text-gray-600">No claims requiring investigation match your filters</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-200">
+            {filteredClaims.map(claim => (
+              <div
+                key={claim.id}
+                className="p-6 hover:bg-gray-50 cursor-pointer transition-colors"
+                onClick={() => navigate(`/claims/${claim.id}`)}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <p className="font-bold text-gray-900">{claim.claim_number}</p>
+                      <span className={`px-3 py-1 text-xs font-bold rounded-full border ${getFraudRiskColor(claim.fraud_risk_level)}`}>
+                        {claim.fraud_risk_level?.toUpperCase()}
+                      </span>
+                      {claim.is_flagged_for_investigation && (
+                        <AlertTriangle className="w-4 h-4 text-orange-500" />
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
+                      <div>
+                        <p className="text-xs text-gray-500">Amount</p>
+                        <p className="text-sm font-semibold text-gray-900">₹{claim.claimed_amount?.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Type</p>
+                        <p className="text-sm font-semibold text-gray-900 capitalize">{claim.policy?.insurance_type || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Risk Score</p>
+                        <p className={`text-sm font-bold ${getRiskScoreColor(claim.fraud_risk_score || 0)}`}>
+                          {claim.fraud_risk_score?.toFixed(1) || 0}/100
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Submitted</p>
+                        <p className="text-sm text-gray-900">
+                          {claim.submitted_at ? new Date(claim.submitted_at).toLocaleDateString() : 'N/A'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="ml-6">
+                    <button className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center gap-2 transition-colors">
+                      <Eye className="w-4 h-4" />
+                      Investigate
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

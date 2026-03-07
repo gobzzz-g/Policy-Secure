@@ -7,6 +7,12 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
+// Log the API URL being used
+console.log('=== API Configuration ===');
+console.log('REACT_APP_API_URL from env:', process.env.REACT_APP_API_URL);
+console.log('Final API_URL being used:', API_URL);
+console.log('========================');
+
 // Create axios instance
 const api = axios.create({
   baseURL: API_URL,
@@ -44,12 +50,12 @@ api.interceptors.response.use(
 // Auth APIs
 export const authAPI = {
   login: async (email, password) => {
-    const formData = new FormData();
+    const formData = new URLSearchParams();
     formData.append('username', email);
     formData.append('password', password);
     
     const response = await api.post('/api/auth/login', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
     return response.data;
   },

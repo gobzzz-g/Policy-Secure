@@ -48,6 +48,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       console.log('Attempting login for:', email);
+      console.log('API URL:', process.env.REACT_APP_API_URL || 'http://localhost:8000');
       const data = await authAPI.login(email, password);
       console.log('Login response received:', data);
       
@@ -66,15 +67,27 @@ export const AuthProvider = ({ children }) => {
       } catch (userError) {
         console.error('Error fetching user info:', userError);
         console.error('Error details:', userError.response);
+        console.error('Error code:', userError.code);
+        console.error('Error message:', userError.message);
         // Clear token if we can't get user info
         localStorage.removeItem('token');
-        toast.error('Failed to load user information. Please try again.');
+        toast.error(`Failed to load user information: ${userError.message}`);
         throw userError;
       }
     } catch (error) {
       console.error('Login error:', error);
       console.error('Error response:', error.response);
-      const errorMessage = error.response?.data?.detail || error.message || 'Login failed';
+      console.error('Error code:', error.code);
+      console.error('Error message:', error.message);
+      console.error('Is network error:', !error.response);
+      
+      let errorMessage = 'Login failed';
+      if (!error.response) {
+        errorMessage = `Network Error: Cannot connect to server at ${process.env.REACT_APP_API_URL || 'http://localhost:8000'}. Please check if the backend server is running.`;
+      } else {
+        errorMessage = error.response?.data?.detail || error.message || 'Login failed';
+      }
+      
       toast.error(errorMessage);
       throw error;
     }
