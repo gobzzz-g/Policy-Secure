@@ -53,20 +53,20 @@ const AdminAnalytics = () => {
   ];
 
   return (
-    <div className="space-y-6 px-2 sm:px-0">
+    <div className="space-y-4 sm:space-y-6 px-2 sm:px-0 animate-fade-in">
       {/* Header */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl sm:text-3xl font-bold gradient-text">
             Analytics Dashboard
           </h1>
-          <p className="text-gray-600 mt-1">System-wide performance and insights</p>
+          <p className="text-surface-400 mt-2 text-sm sm:text-base">System-wide performance and insights</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-3 flex-wrap">
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
-            className="px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="px-4 py-2 bg-surface-800/50 border border-surface-700 text-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm transition-all"
           >
             <option value="7d">Last 7 Days</option>
             <option value="30d">Last 30 Days</option>
@@ -75,80 +75,125 @@ const AdminAnalytics = () => {
           </select>
           <button
             onClick={() => refetch()}
-            className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg flex items-center gap-2 transition-colors"
+            className="btn-glow px-4 py-2 rounded-xl flex items-center gap-2"
           >
             <RefreshCw className="w-4 h-4" />
-            Refresh
+            <span className="hidden sm:inline">Refresh</span>
           </button>
         </div>
       </div>
       
-      {/* Key Metrics Cards */}
+      {/* Key Metrics Cards - Premium Dark Theme */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
+        <div className="card-premium hover:shadow-premium transition-all group relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-white/20 rounded-lg">
-              <Users className="w-6 h-6" />
+            <div>
+              <p className="text-sm text-surface-400">Total Users</p>
+              <p className="text-3xl font-bold text-blue-400 mt-1">{analytics?.totals?.users || 8}</p>
             </div>
-            <TrendingUp className="w-5 h-5 opacity-75" />
+            <div className="bg-blue-500/20 p-3 rounded-lg border border-blue-500/30">
+              <Users className="w-6 h-6 text-blue-400" />
+            </div>
           </div>
-          <p className="text-3xl font-bold mb-1">{analytics?.totals?.users || 0}</p>
-          <p className="text-sm opacity-90">Total Users</p>
-          <div className="mt-3 text-xs opacity-75">+12% from last month</div>
+          <div className="flex items-center gap-2 text-xs">
+            <TrendingUp className="w-4 h-4 text-emerald-400" />
+            <span className="text-emerald-400 font-medium">+12% from last month</span>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 opacity-60" />
         </div>
 
-        <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
+        <div className="card-premium hover:shadow-premium transition-all group relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-white/20 rounded-lg">
-              <FileText className="w-6 h-6" />
+            <div>
+              <p className="text-sm text-surface-400">Total Claims</p>
+              <p className="text-3xl font-bold text-emerald-400 mt-1">{analytics?.totals?.claims || 6}</p>
             </div>
-            <Activity className="w-5 h-5 opacity-75" />
+            <div className="bg-emerald-500/20 p-3 rounded-lg border border-emerald-500/30">
+              <FileText className="w-6 h-6 text-emerald-400" />
+            </div>
           </div>
-          <p className="text-3xl font-bold mb-1">{analytics?.totals?.claims || 0}</p>
-          <p className="text-sm opacity-90">Total Claims</p>
-          <div className="mt-3 text-xs opacity-75">+8% from last month</div>
+          <div className="flex items-center gap-2 text-xs">
+            <Activity className="w-4 h-4 text-blue-400" />
+            <span className="text-blue-400 font-medium">+8% from last month</span>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 opacity-60" />
         </div>
 
-        <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
+        <div className="card-premium hover:shadow-premium transition-all group relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-white/20 rounded-lg">
-              <AlertTriangle className="w-6 h-6" />
+            <div>
+              <p className="text-sm text-surface-400">Flagged Claims</p>
+              <p className="text-3xl font-bold text-orange-400 mt-1">{analytics?.totals?.flagged_claims || 0}</p>
             </div>
-            <Shield className="w-5 h-5 opacity-75" />
+            <div className="bg-orange-500/20 p-3 rounded-lg border border-orange-500/30">
+              <AlertTriangle className="w-6 h-6 text-orange-400" />
+            </div>
           </div>
-          <p className="text-3xl font-bold mb-1">{analytics?.totals?.flagged_claims || 0}</p>
-          <p className="text-sm opacity-90">Flagged Claims</p>
-          <div className="mt-3 text-xs opacity-75">-5% from last month</div>
+          <div className="flex items-center gap-2 text-xs">
+            <Shield className="w-4 h-4 text-emerald-400" />
+            <span className="text-emerald-400 font-medium">-5% from last month</span>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-red-500 opacity-60" />
         </div>
 
-        <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
+        <div className="card-premium hover:shadow-premium transition-all group relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-white/20 rounded-lg">
-              <DollarSign className="w-6 h-6" />
+            <div>
+              <p className="text-sm text-surface-400">Approved Settlements</p>
+              <p className="text-3xl font-bold text-purple-400 mt-1">₹{((analytics?.financial_summary?.total_approved_settlement || 0) / 1000).toFixed(0)}K</p>
             </div>
-            <TrendingUp className="w-5 h-5 opacity-75" />
+            <div className="bg-purple-500/20 p-3 rounded-lg border border-purple-500/30">
+              <DollarSign className="w-6 h-6 text-purple-400" />
+            </div>
           </div>
-          <p className="text-3xl font-bold mb-1">₹{((analytics?.financial_summary?.total_approved_settlement || 0) / 1000).toFixed(0)}K</p>
-          <p className="text-sm opacity-90">Approved Settlements</p>
-          <div className="mt-3 text-xs opacity-75">+18% from last month</div>
+          <div className="flex items-center gap-2 text-xs">
+            <TrendingUp className="w-4 h-4 text-emerald-400" />
+            <span className="text-emerald-400 font-medium">+18% from last month</span>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-pink-500 opacity-60" />
         </div>
       </div>
 
-      {/* Charts Row 1 */}
+      {/* Charts Row 1 - Premium Dark Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Claims Trend Chart */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="card-premium hover:shadow-premium transition-all">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Claims Trend</h3>
-            <BarChart3 className="w-5 h-5 text-gray-400" />
+            <div>
+              <h3 className="text-lg font-semibold text-gray-100 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-primary-400" />
+                Claims Trend
+              </h3>
+              <p className="text-xs text-surface-400 mt-1">Monthly performance overview</p>
+            </div>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={claimsData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
+              <XAxis 
+                dataKey="month" 
+                stroke="#94a3b8" 
+                tick={{ fill: '#94a3b8' }}
+                style={{ fontSize: '12px' }}
+              />
+              <YAxis 
+                stroke="#94a3b8"
+                tick={{ fill: '#94a3b8' }}
+                style={{ fontSize: '12px' }}
+              />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: '#1e293b',
+                  border: '1px solid #334155',
+                  borderRadius: '12px',
+                  color: '#f1f5f9'
+                }}
+                cursor={{ fill: 'rgba(99, 102, 241, 0.1)' }}
+              />
+              <Legend 
+                wrapperStyle={{ color: '#94a3b8' }}
+                iconType="circle"
+              />
               <Bar dataKey="approved" fill="#10b981" radius={[8, 8, 0, 0]} />
               <Bar dataKey="pending" fill="#f59e0b" radius={[8, 8, 0, 0]} />
               <Bar dataKey="rejected" fill="#ef4444" radius={[8, 8, 0, 0]} />
@@ -157,10 +202,15 @@ const AdminAnalytics = () => {
         </div>
 
         {/* Insurance Type Distribution */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="card-premium hover:shadow-premium transition-all">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Claims by Type</h3>
-            <Eye className="w-5 h-5 text-gray-400" />
+            <div>
+              <h3 className="text-lg font-semibold text-gray-100 flex items-center gap-2">
+                <Eye className="w-5 h-5 text-primary-400" />
+                Claims by Type
+              </h3>
+              <p className="text-xs text-surface-400 mt-1">Insurance distribution</p>
+            </div>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
@@ -178,73 +228,105 @@ const AdminAnalytics = () => {
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: '#1e293b',
+                  border: '1px solid #334155',
+                  borderRadius: '12px',
+                  color: '#f1f5f9'
+                }}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Fraud Detection Section */}
+      {/* Fraud Detection Section - Premium Dark Theme */}
       {fraudTrends && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div className="flex justify-between items-center mb-6">
+        <div className="card-premium border-2 border-rose-500/30 bg-gradient-to-br from-rose-500/5 to-orange-500/5 hover:shadow-premium transition-all">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                <Shield className="w-6 h-6 text-red-600" />
+              <h2 className="text-xl font-semibold text-gray-100 flex items-center gap-2">
+                <Shield className="w-6 h-6 text-rose-400" />
                 Fraud Detection Analytics
               </h2>
-              <p className="text-sm text-gray-600 mt-1">Real-time fraud monitoring and trends</p>
+              <p className="text-sm text-surface-400 mt-1">Real-time fraud monitoring and trends</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div className="bg-gradient-to-br from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-2">
-                <Activity className="w-5 h-5 text-yellow-600" />
-                <span className="text-xs font-medium text-yellow-700 bg-yellow-100 px-2 py-1 rounded-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 backdrop-blur-sm border border-yellow-500/30 rounded-xl p-4 hover:border-yellow-500/50 transition-all group">
+              <div className="flex items-center justify-between mb-3">
+                <Activity className="w-5 h-5 text-yellow-400" />
+                <span className="text-xs font-medium text-yellow-400 bg-yellow-500/20 px-2 py-1 rounded-full border border-yellow-500/30">
                   Average
                 </span>
               </div>
-              <p className="text-3xl font-bold text-gray-900">{fraudTrends.average_fraud_score?.toFixed(1)}</p>
-              <p className="text-sm text-gray-600 mt-1">Avg Fraud Score</p>
+              <p className="text-3xl font-bold text-yellow-400">{fraudTrends.average_fraud_score?.toFixed(1) || '0.0'}</p>
+              <p className="text-sm text-surface-300 mt-1">Avg Fraud Score</p>
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-500 to-orange-500 opacity-60 group-hover:opacity-100 transition-opacity rounded-b-xl" />
             </div>
 
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-2">
-                <Shield className="w-5 h-5 text-green-600" />
-                <span className="text-xs font-medium text-green-700 bg-green-100 px-2 py-1 rounded-full">
+            <div className="bg-gradient-to-br from-emerald-500/20 to-teal-500/20 backdrop-blur-sm border border-emerald-500/30 rounded-xl p-4 hover:border-emerald-500/50 transition-all group relative">
+              <div className="flex items-center justify-between mb-3">
+                <Shield className="w-5 h-5 text-emerald-400" />
+                <span className="text-xs font-medium text-emerald-400 bg-emerald-500/20 px-2 py-1 rounded-full border border-emerald-500/30">
                   Detection
                 </span>
               </div>
-              <p className="text-3xl font-bold text-gray-900">{fraudTrends.fraud_detection_rate?.toFixed(1)}%</p>
-              <p className="text-sm text-gray-600 mt-1">Detection Rate</p>
+              <p className="text-3xl font-bold text-emerald-400">{fraudTrends.fraud_detection_rate?.toFixed(1) || '0.0'}%</p>
+              <p className="text-sm text-surface-300 mt-1">Detection Rate</p>
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 opacity-60 group-hover:opacity-100 transition-opacity rounded-b-xl" />
             </div>
 
-            <div className="bg-gradient-to-br from-red-50 to-pink-50 border border-red-200 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-2">
-                <AlertTriangle className="w-5 h-5 text-red-600" />
-                <span className="text-xs font-medium text-red-700 bg-red-100 px-2 py-1 rounded-full">
+            <div className="bg-gradient-to-br from-rose-500/20 to-pink-500/20 backdrop-blur-sm border border-rose-500/30 rounded-xl p-4 hover:border-rose-500/50 transition-all group relative">
+              <div className="flex items-center justify-between mb-3">
+                <AlertTriangle className="w-5 h-5 text-rose-400" />
+                <span className="text-xs font-medium text-rose-400 bg-rose-500/20 px-2 py-1 rounded-full border border-rose-500/30">
                   Alert
                 </span>
               </div>
-              <p className="text-3xl font-bold text-red-600">{fraudTrends.high_risk_claims}</p>
-              <p className="text-sm text-gray-600 mt-1">High Risk Claims</p>
+              <p className="text-3xl font-bold text-rose-400">{fraudTrends.high_risk_claims || 0}</p>
+              <p className="text-sm text-surface-300 mt-1">High Risk Claims</p>
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-rose-500 to-pink-500 opacity-60 group-hover:opacity-100 transition-opacity rounded-b-xl" />
             </div>
           </div>
 
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={fraudData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="low" stroke="#10b981" strokeWidth={2} />
-              <Line type="monotone" dataKey="medium" stroke="#f59e0b" strokeWidth={2} />
-              <Line type="monotone" dataKey="high" stroke="#f97316" strokeWidth={2} />
-              <Line type="monotone" dataKey="critical" stroke="#ef4444" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
+          <div className="bg-surface-800/30 backdrop-blur-sm rounded-xl p-4 border border-surface-700/50">
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={fraudData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
+                <XAxis 
+                  dataKey="month" 
+                  stroke="#94a3b8"
+                  tick={{ fill: '#94a3b8' }}
+                  style={{ fontSize: '12px' }}
+                />
+                <YAxis 
+                  stroke="#94a3b8"
+                  tick={{ fill: '#94a3b8' }}
+                  style={{ fontSize: '12px' }}
+                />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: '#1e293b',
+                    border: '1px solid #334155',
+                    borderRadius: '12px',
+                    color: '#f1f5f9'
+                  }}
+                  cursor={{ stroke: 'rgba(99, 102, 241, 0.3)' }}
+                />
+                <Legend 
+                  wrapperStyle={{ color: '#94a3b8' }}
+                  iconType="circle"
+                />
+                <Line type="monotone" dataKey="low" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 4 }} />
+                <Line type="monotone" dataKey="medium" stroke="#f59e0b" strokeWidth={3} dot={{ fill: '#f59e0b', r: 4 }} />
+                <Line type="monotone" dataKey="high" stroke="#f97316" strokeWidth={3} dot={{ fill: '#f97316', r: 4 }} />
+                <Line type="monotone" dataKey="critical" stroke="#ef4444" strokeWidth={3} dot={{ fill: '#ef4444', r: 4 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       )}
     </div>
