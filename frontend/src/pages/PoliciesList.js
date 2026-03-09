@@ -64,7 +64,7 @@ const PoliciesList = () => {
           </div>
           <div className="px-4 py-3 bg-gradient-to-br from-emerald-600/20 to-emerald-500/10 rounded-xl border border-emerald-500/30 backdrop-blur-sm">
             <p className="text-xs text-surface-400">Total Coverage</p>
-            <p className="text-2xl font-bold text-emerald-400">${(totalCoverage / 1000).toFixed(0)}K</p>
+            <p className="text-2xl font-bold text-emerald-400">₹{(totalCoverage / 1000).toFixed(0)}K</p>
           </div>
         </div>
       </div>
@@ -144,7 +144,7 @@ const PoliciesList = () => {
                     <DollarSign className="w-4 h-4 mr-1" />
                     Sum Insured
                   </div>
-                  <p className="font-bold text-primary-400">${policy.sum_insured?.toLocaleString()}</p>
+                  <p className="font-bold text-primary-400">₹{policy.sum_insured?.toLocaleString()}</p>
                 </div>
                 <div>
                   <div className="flex items-center text-sm text-surface-400 mb-1">

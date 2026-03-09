@@ -238,7 +238,7 @@ const Dashboard = () => {
         />
         <StatCard
           title="Settlement Amount"
-          value="$38.5M"
+          value="₹38.5M"
           subtext="Total 49.7%"
           subtextColor="text-amber-400"
           glowColor="bg-orange-400"
