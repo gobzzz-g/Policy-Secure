@@ -324,7 +324,7 @@ const NewClaim = () => {
                   Claimed Amount <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+                  <span className="absolute left-3 top-2.5 text-gray-500">₹</span>
                   <input
                     type="number"
                     name="claimed_amount"
@@ -347,7 +347,7 @@ const NewClaim = () => {
                   Estimated Loss <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+                  <span className="absolute left-3 top-2.5 text-gray-500">₹</span>
                   <input
                     type="number"
                     name="estimated_loss"

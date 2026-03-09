@@ -171,7 +171,7 @@ const OfficerDashboard = () => {
                 <div className="flex-1">
                   <p className="font-medium text-gray-100">{claim.claim_number}</p>
                   <p className="text-sm text-surface-300 mt-1">
-                    ${claim.claimed_amount.toLocaleString()} • {claim.policy?.insurance_type}
+                    ₹{claim.claimed_amount.toLocaleString()} • {claim.policy?.insurance_type}
                   </p>
                 </div>
                 <div className="flex items-center space-x-3">
@@ -267,11 +267,11 @@ const OfficerDashboard = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-100">
-                        ${claim.claimed_amount.toLocaleString()}
+                        ₹{claim.claimed_amount.toLocaleString()}
                       </div>
                       {claim.recommended_settlement && (
                         <div className="text-xs text-surface-400">
-                          Rec: ${claim.recommended_settlement.toLocaleString()}
+                          Rec: ₹{claim.recommended_settlement.toLocaleString()}
                         </div>
                       )}
                     </td>
