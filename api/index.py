@@ -4,6 +4,7 @@ This file exposes the FastAPI app for Vercel deployment.
 """
 import sys
 import os
+from pathlib import Path
 
 # Set default environment variables if not set
 os.environ.setdefault('DATABASE_URL', 'postgresql://postgres:password@localhost:5432/insurance_claims')
@@ -15,9 +16,9 @@ os.environ.setdefault('DEBUG', 'False')
 os.environ.setdefault('ALLOWED_ORIGINS', '*')
 
 # Add the backend directory to the Python path
-backend_path = os.path.join(os.path.dirname(__file__), '..', 'backend')
-if backend_path not in sys.path:
-    sys.path.insert(0, backend_path)
+current_file = Path(__file__).resolve()
+backend_path = current_file.parent.parent / 'backend'
+sys.path.insert(0, str(backend_path))
 
 try:
     from main import app
@@ -36,9 +37,13 @@ except Exception as e:
             content={
                 "error": "Failed to initialize application",
                 "message": str(e),
+                "python_path": sys.path,
+                "backend_path": str(backend_path),
+                "cwd": os.getcwd(),
                 "hint": "Please ensure all environment variables are set in Vercel dashboard"
             }
         )
-
-# Vercel needs to call the 'app' directly
-# This is the ASGI application that Vercel will invoke
+    
+    @app.get("/health")
+    async def health():
+        return {"status": "error", "message": str(e)}
