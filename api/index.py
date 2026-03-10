@@ -22,10 +22,6 @@ if backend_path not in sys.path:
 try:
     from main import app
     
-    # Expose the app for Vercel
-    # Vercel will call this as a serverless function
-    handler = app
-    
 except Exception as e:
     # If import fails, create a basic FastAPI app that shows the error
     from fastapi import FastAPI
@@ -43,5 +39,6 @@ except Exception as e:
                 "hint": "Please ensure all environment variables are set in Vercel dashboard"
             }
         )
-    
-    handler = app
+
+# Vercel needs to call the 'app' directly
+# This is the ASGI application that Vercel will invoke
