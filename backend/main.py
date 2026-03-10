@@ -89,12 +89,38 @@ app.include_router(admin.router)
 # Health check endpoints
 @app.get("/")
 async def root():
-    """Root endpoint."""
+    """Root endpoint - API information."""
     return {
-        "message": "Policy Secure - Insurance Claims Processing Platform",
+        "message": "Policy Secure AI Backend API",
+        "status": "running",
+        "platform": "Vercel Serverless",
         "version": settings.VERSION,
-        "status": "operational",
-        "docs": "/docs" if settings.DEBUG else "disabled"
+        "environment": settings.ENVIRONMENT,
+        "endpoints": {
+            "health": "/health",
+            "docs": "/docs" if settings.DEBUG else "disabled",
+            "auth": {
+                "register": "/api/auth/register",
+                "login": "/api/auth/token",
+                "user": "/api/auth/users/me"
+            },
+            "claims": {
+                "list": "/api/claims/",
+                "create": "/api/claims/",
+                "detail": "/api/claims/{id}",
+                "assign": "/api/claims/{id}/assign"
+            },
+            "policies": {
+                "list": "/api/policies/",
+                "create": "/api/policies/",
+                "detail": "/api/policies/{id}"
+            },
+            "admin": {
+                "analytics": "/api/admin/analytics",
+                "fraud": "/api/admin/fraud/analyze/{claim_id}",
+                "settlement": "/api/admin/settlement/{claim_id}"
+            }
+        }
     }
 
 
