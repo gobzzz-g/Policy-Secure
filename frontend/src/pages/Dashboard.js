@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useQuery } from '@tanstack/react-query';
 import { claimsAPI, adminAPI } from '../services/api';
-import { Plus } from 'lucide-react';
+import { Plus, Bell, CheckCheck, AlertCircle, Info } from 'lucide-react';
 import Loading from '../components/Loading';
 import {
   ComposedChart,
@@ -177,6 +177,29 @@ const CustomTooltip = ({ active, payload, label }) => {
 const Dashboard = () => {
   const { user, isPolicyholder, isAdmin, isFraudInvestigator } = useAuth();
   const navigate = useNavigate();
+  const [showNotifications, setShowNotifications] = useState(false);
+  const notificationRef = useRef(null);
+
+  // Sample notifications
+  const notifications = [
+    { id: 1, type: 'success', title: 'Claim Approved', message: 'Your claim CLM-20260112-68907 has been approved', time: '5 min ago', unread: true },
+    { id: 2, type: 'info', title: 'New Update', message: 'Fraud detection model updated with improved accuracy', time: '1 hour ago', unread: true },
+    { id: 3, type: 'warning', title: 'Review Required', message: 'Claim CLM-20260112-26599 needs additional documentation', time: '3 hours ago', unread: false },
+    { id: 4, type: 'info', title: 'System Maintenance', message: 'Scheduled maintenance on March 15th, 2026', time: '1 day ago', unread: false },
+  ];
+
+  const unreadCount = notifications.filter(n => n.unread).length;
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setShowNotifications(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleEdit = (claimId) => {
     navigate(`/claims/${claimId}`);
@@ -184,6 +207,14 @@ const Dashboard = () => {
 
   const handleAssign = (claimId) => {
     alert(`Assign functionality for claim ${claimId} - Coming soon!\n\nThis will allow you to assign claims to investigators.`);
+  };
+
+  const getNotificationIcon = (type) => {
+    switch(type) {
+      case 'success': return <CheckCheck className="w-4 h-4 text-emerald-400" />;
+      case 'warning': return <AlertCircle className="w-4 h-4 text-amber-400" />;
+      default: return <Info className="w-4 h-4 text-blue-400" />;
+    }
   };
 
   const { data: claims, isLoading: claimsLoading } = useQuery({
@@ -209,9 +240,63 @@ const Dashboard = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-2">
         <h1 className="text-xl sm:text-2xl font-bold text-white">Dashboard</h1>
         <div className="flex items-center space-x-2 sm:space-x-4 w-full sm:w-auto">
-          <div className="relative cursor-pointer hover:bg-surface-800 p-2 rounded-full transition-colors">
-            <div className="w-2 h-2 bg-red-500 rounded-full absolute top-1 right-2 border border-surface-950"></div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-surface-400 hover:text-white"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
+          <div ref={notificationRef} className="relative">
+            <button 
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="relative cursor-pointer hover:bg-surface-800 p-2 rounded-full transition-colors"
+            >
+              {unreadCount > 0 && (
+                <div className="w-5 h-5 bg-red-500 rounded-full absolute -top-1 -right-1 border-2 border-surface-950 flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">{unreadCount}</span>
+                </div>
+              )}
+              <Bell className="w-5 h-5 text-surface-400 hover:text-white" />
+            </button>
+            
+            {/* Notifications Dropdown */}
+            {showNotifications && (
+              <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-surface-900 border border-surface-700 rounded-xl shadow-2xl z-50 animate-fade-in">
+                <div className="p-4 border-b border-surface-800">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-white font-semibold text-sm">Notifications</h3>
+                    {unreadCount > 0 && (
+                      <span className="text-xs text-surface-400">{unreadCount} new</span>
+                    )}
+                  </div>
+                </div>
+                <div className="max-h-96 overflow-y-auto">
+                  {notifications.map((notification) => (
+                    <div 
+                      key={notification.id}
+                      className={`p-4 border-b border-surface-800/50 hover:bg-surface-800/30 transition-colors cursor-pointer ${
+                        notification.unread ? 'bg-surface-800/20' : ''
+                      }`}
+                    >
+                      <div className="flex gap-3">
+                        <div className="flex-shrink-0 mt-1">
+                          {getNotificationIcon(notification.type)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="text-sm font-medium text-white">{notification.title}</p>
+                            {notification.unread && (
+                              <span className="w-2 h-2 bg-primary-500 rounded-full flex-shrink-0 mt-1.5"></span>
+                            )}
+                          </div>
+                          <p className="text-xs text-surface-400 mt-1">{notification.message}</p>
+                          <p className="text-xs text-surface-500 mt-2">{notification.time}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="p-3 border-t border-surface-800">
+                  <button className="w-full text-center text-sm text-primary-400 hover:text-primary-300 font-medium transition-colors">
+                    View All Notifications
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
           {isPolicyholder && (
             <Link to="/claims/new" className="px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-xl inline-flex items-center transition-colors">
