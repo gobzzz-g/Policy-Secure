@@ -5,7 +5,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Shield, Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
+import { Shield, Mail, Lock, ArrowRight, Sparkles, ArrowLeft } from 'lucide-react';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -41,6 +41,15 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-surface-950 flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Back Button */}
+      <Link 
+        to="/" 
+        className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 bg-surface-800/80 backdrop-blur-sm border border-surface-700/50 rounded-xl text-surface-300 hover:border-primary-500/50 hover:bg-surface-800 hover:text-primary-300 transition-all duration-200"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span className="text-sm font-medium">Back</span>
+      </Link>
+
       {/* Background effects */}
       <div className="absolute inset-0 grid-bg" />
       <div className="glow-orb w-[500px] h-[500px] bg-primary-600 top-[-200px] right-[-100px]" />
@@ -140,12 +149,6 @@ const LoginPage = () => {
               </button>
             ))}
           </div>
-        </div>
-
-        <div className="mt-4 text-center animate-fade-in">
-          <Link to="/" className="text-sm text-surface-500 hover:text-surface-300 transition-colors">
-            ← Back to home
-          </Link>
         </div>
       </div>
     </div>
