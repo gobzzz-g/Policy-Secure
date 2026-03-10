@@ -1,0 +1,53 @@
+# Dependencies
+node_modules
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Build outputs
+frontend/build
+frontend/.cache
+.next
+.nuxt
+dist
+
+# Environment and config
+.env
+.env.local
+.env.*
+*.log
+
+# Development files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Testing
+.coverage
+htmlcov
+.pytest_cache
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads
+backend/uploads/*
+uploads/*
+
+# Documentation
+*.md
+!README.md
+
+# Git
+.git
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
