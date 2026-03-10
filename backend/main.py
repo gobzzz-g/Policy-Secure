@@ -131,12 +131,18 @@ async def startup_event():
     logger.info(f"Starting {settings.APP_NAME} v{settings.VERSION}")
     logger.info(f"Environment: {settings.ENVIRONMENT}")
     
-    # Initialize database
-    try:
-        init_db()
-        logger.info("Database initialized successfully")
-    except Exception as e:
-        logger.error(f"Database initialization failed: {str(e)}")
+    # Skip database initialization in serverless environments
+    # Database will be initialized on first request
+    if settings.ENVIRONMENT != "production":
+        # Initialize database only in development
+        try:
+            init_db()
+            logger.info("Database initialized successfully")
+        except Exception as e:
+            logger.warning(f"Database initialization failed: {str(e)}")
+            logger.warning("Continuing without database initialization - will initialize on demand")
+    else:
+        logger.info("Skipping database initialization in production (serverless mode)")
     
     logger.info("Application startup complete")
 

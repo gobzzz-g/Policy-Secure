@@ -17,13 +17,13 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
     DEBUG: bool = True
     
-    # Database
-    DATABASE_URL: str
-    MONGODB_URL: str
+    # Database - with defaults to prevent crashes
+    DATABASE_URL: str = "postgresql://postgres:password@localhost:5432/insurance_claims"
+    MONGODB_URL: str = "mongodb://localhost:27017/"
     MONGODB_DB_NAME: str = "insurance_claims_docs"
     
-    # Security
-    SECRET_KEY: str
+    # Security - with default values
+    SECRET_KEY: str = "default-secret-key-change-in-production-minimum-32-characters-long"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
@@ -36,12 +36,12 @@ class Settings(BaseSettings):
         return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",") if origin.strip()]
     
     # Gemini API
-    GEMINI_API_KEY: str
+    GEMINI_API_KEY: str = "your-gemini-api-key-here"
     GEMINI_MODEL: str = "gemini-pro"
     
     # File Upload
     MAX_UPLOAD_SIZE: int = 10485760  # 10MB
-    UPLOAD_DIR: str = "./uploads"
+    UPLOAD_DIR: str = "/tmp/uploads"  # Use /tmp for serverless environments
     ALLOWED_EXTENSIONS: List[str] = [".jpg", ".jpeg", ".png", ".pdf", ".doc", ".docx"]
     
     # Fraud Detection Thresholds
@@ -60,7 +60,13 @@ class Settings(BaseSettings):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Create upload directory if it doesn't exist
-        os.makedirs(self.UPLOAD_DIR, exist_ok=True)
+        try:
+            os.makedirs(self.UPLOAD_DIR, exist_ok=True)
+        except Exception as e:
+            # In serverless environments, this might fail
+            # Log the error but don't crash
+            import logging
+            logging.warning(f"Could not create upload directory {self.UPLOAD_DIR}: {e}")
 
 
 # Global settings instance
