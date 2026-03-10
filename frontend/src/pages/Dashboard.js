@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useQuery } from '@tanstack/react-query';
 import { claimsAPI, adminAPI } from '../services/api';
@@ -176,6 +176,15 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 const Dashboard = () => {
   const { user, isPolicyholder, isAdmin, isFraudInvestigator } = useAuth();
+  const navigate = useNavigate();
+
+  const handleEdit = (claimId) => {
+    navigate(`/claims/${claimId}`);
+  };
+
+  const handleAssign = (claimId) => {
+    alert(`Assign functionality for claim ${claimId} - Coming soon!\n\nThis will allow you to assign claims to investigators.`);
+  };
 
   const { data: claims, isLoading: claimsLoading } = useQuery({
     queryKey: ['claims'],
@@ -336,9 +345,9 @@ const Dashboard = () => {
                     <td className="px-4 py-4 text-right text-blue-500 font-medium">
                       <Link to={`/claims/${claim.id}`} className="hover:text-blue-400 transition-colors">View</Link>
                       <span className="text-surface-700 mx-2">|</span>
-                      <button className="hover:text-blue-400 transition-colors">Edit</button>
+                      <button onClick={() => handleEdit(claim.id)} className="hover:text-blue-400 transition-colors">Edit</button>
                       <span className="text-surface-700 mx-2">|</span>
-                      <button className="hover:text-blue-400 transition-colors">Assign</button>
+                      <button onClick={() => handleAssign(claim.id)} className="hover:text-blue-400 transition-colors">Assign</button>
                     </td>
                   </tr>
                 ))
@@ -353,11 +362,11 @@ const Dashboard = () => {
                     <td className="px-4 py-4 text-surface-300">Under Review</td>
                     <td className="px-4 py-4 text-surface-300">Low (0)</td>
                     <td className="px-4 py-4 text-right text-blue-500 font-medium whitespace-nowrap">
-                      <button className="hover:text-blue-400 transition-colors">View</button>
+                      <button onClick={() => alert('This is a demo entry. Please create or view a real claim.')} className="hover:text-blue-400 transition-colors">View</button>
                       <span className="text-surface-700 mx-2">|</span>
-                      <button className="hover:text-blue-400 transition-colors">Edit</button>
+                      <button onClick={() => alert('This is a demo entry. Please create or view a real claim.')} className="hover:text-blue-400 transition-colors">Edit</button>
                       <span className="text-surface-700 mx-2">|</span>
-                      <button className="hover:text-blue-400 transition-colors">Assign</button>
+                      <button onClick={() => alert('This is a demo entry. Please create or view a real claim.')} className="hover:text-blue-400 transition-colors">Assign</button>
                     </td>
                   </tr>
                 ))
