@@ -3,6 +3,7 @@ services:
   - type: web
     name: policy-secure-backend
     env: python
+    pythonVersion: 3.11.0
     region: oregon
     plan: free
     branch: main
@@ -14,8 +15,6 @@ services:
         value: production
       - key: DEBUG
         value: False
-      - key: PYTHON_VERSION
-        value: 3.11.0
       - key: PYTHONPATH
         value: /opt/render/project/src/backend
       - key: DATABASE_URL
