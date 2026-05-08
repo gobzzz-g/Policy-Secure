@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 
 const Layout = ({ children }) => {
-  const { user, logout, isPolicyholder, isAdmin, isFraudInvestigator } = useAuth();
+  const { user, logout, isPolicyholder, isClaimsOfficer, isAdmin, isFraudInvestigator } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,6 +48,14 @@ const Layout = ({ children }) => {
         { path: '/investigator/dashboard', icon: Shield, label: 'Investigation Dashboard' },
         { path: '/claims', icon: FileText, label: 'Flagged Claims' },
         { path: '/admin/analytics', icon: BarChart3, label: 'Fraud Analytics' },
+      ];
+    }
+
+    if (isClaimsOfficer) {
+      return [
+        ...baseItems,
+        { path: '/officer/dashboard', icon: BarChart3, label: 'Officer Dashboard' },
+        { path: '/claims', icon: FileText, label: 'Claims Queue' },
       ];
     }
 

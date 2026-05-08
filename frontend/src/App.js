@@ -14,8 +14,10 @@ import RegisterPage from './pages/RegisterPage';
 import Dashboard from './pages/Dashboard';
 import ClaimsList from './pages/ClaimsList';
 import ClaimDetail from './pages/ClaimDetail';
+import ClaimDocuments from './pages/ClaimDocuments';
 import NewClaim from './pages/NewClaim';
 import PoliciesList from './pages/PoliciesList';
+import PolicyDetail from './pages/PolicyDetail';
 import AdminAnalytics from './pages/AdminAnalytics';
 import OfficerDashboard from './pages/OfficerDashboard';
 import InvestigatorDashboard from './pages/InvestigatorDashboard';
@@ -96,6 +98,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/claims/:id/documents"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ClaimDocuments />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
         
         <Route
           path="/policies"
@@ -103,6 +116,17 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <PoliciesList />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/policies/:id"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PolicyDetail />
               </Layout>
             </ProtectedRoute>
           }
@@ -122,7 +146,7 @@ function App() {
         <Route
           path="/officer/dashboard"
           element={
-            <ProtectedRoute allowedRoles={['admin']}>
+            <ProtectedRoute allowedRoles={['admin', 'claims_officer']}>
               <Layout>
                 <OfficerDashboard />
               </Layout>

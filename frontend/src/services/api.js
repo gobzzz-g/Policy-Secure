@@ -113,6 +113,41 @@ export const claimsAPI = {
     const response = await api.delete(`/api/claims/${claimId}`);
     return response.data;
   },
+
+  listDocuments: async (claimId) => {
+    const response = await api.get(`/api/claims/${claimId}/documents`);
+    return response.data;
+  },
+
+  uploadDocument: async (claimId, file, documentType) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (documentType) {
+      formData.append('document_type', documentType);
+    }
+
+    const response = await api.post(`/api/claims/${claimId}/documents`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  },
+
+  verifyDocument: async (claimId, documentId, payload) => {
+    const response = await api.put(`/api/claims/${claimId}/documents/${documentId}/verify`, payload);
+    return response.data;
+  },
+
+  downloadDocument: async (claimId, documentId) => {
+    const response = await api.get(`/api/claims/${claimId}/documents/${documentId}/download`, {
+      responseType: 'blob',
+    });
+    return response;
+  },
+
+  timeline: async (claimId) => {
+    const response = await api.get(`/api/claims/${claimId}/timeline`);
+    return response.data;
+  },
 };
 
 // Policies APIs

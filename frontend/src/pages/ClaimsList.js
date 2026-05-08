@@ -246,13 +246,22 @@ const ClaimsList = () => {
                       {claim.submitted_at ? format(new Date(claim.submitted_at), 'MMM dd, yyyy') : '-'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <Link
-                        to={`/claims/${claim.id}`}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-600 to-accent-violet hover:shadow-glow text-white text-sm font-medium rounded-xl transition-all"
-                      >
-                        <Eye className="w-4 h-4" />
-                        View
-                      </Link>
+                      <div className="inline-flex items-center gap-2">
+                        <Link
+                          to={`/claims/${claim.id}`}
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-600 to-accent-violet hover:shadow-glow text-white text-sm font-medium rounded-xl transition-all"
+                        >
+                          <Eye className="w-4 h-4" />
+                          View
+                        </Link>
+                        <Link
+                          to={`/claims/${claim.id}/documents`}
+                          className="inline-flex items-center gap-2 px-3 py-2 border border-surface-600 text-surface-200 text-sm font-medium rounded-xl hover:border-primary-500/50 transition-all"
+                        >
+                          <FileText className="w-4 h-4" />
+                          Documents
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -9,6 +9,8 @@ const NewClaim = () => {
   const [loading, setLoading] = useState(false);
   const [loadingPolicies, setLoadingPolicies] = useState(true);
   const [policies, setPolicies] = useState([]);
+  const [selectedPolicyDetails, setSelectedPolicyDetails] = useState(null);
+  const [loadingPolicyDetails, setLoadingPolicyDetails] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   
@@ -29,11 +31,33 @@ const NewClaim = () => {
     loadPolicies();
   }, []);
 
+  useEffect(() => {
+    const loadPolicyDetails = async () => {
+      if (!formData.policy_id) {
+        setSelectedPolicyDetails(null);
+        return;
+      }
+
+      try {
+        setLoadingPolicyDetails(true);
+        const policy = await policiesAPI.get(formData.policy_id);
+        setSelectedPolicyDetails(policy);
+      } catch (err) {
+        console.error('Error loading policy details:', err);
+        setSelectedPolicyDetails(null);
+      } finally {
+        setLoadingPolicyDetails(false);
+      }
+    };
+
+    loadPolicyDetails();
+  }, [formData.policy_id]);
+
   const loadPolicies = async () => {
     try {
       setLoadingPolicies(true);
       const data = await policiesAPI.list();
-      const activePolicies = data.filter(p => p.status === 'active');
+      const activePolicies = data.filter(p => p.is_active === true || p.is_active === 'true' || p.is_active === 1 || p.is_active === '1');
       setPolicies(activePolicies);
       
       if (activePolicies.length === 0) {
@@ -136,11 +160,11 @@ const NewClaim = () => {
       
       const response = await claimsAPI.create(claimData);
       
-      setSuccess('Claim created successfully! Redirecting...');
+      setSuccess('Claim created successfully! Redirecting to document upload...');
       
       // Redirect to claim detail page after 2 seconds
       setTimeout(() => {
-        navigate(`/claims/${response.id}`);
+        navigate(`/claims/${response.id}/documents`);
       }, 2000);
       
     } catch (err) {
@@ -154,6 +178,8 @@ const NewClaim = () => {
   const getSelectedPolicy = () => {
     return policies.find(p => p.id === parseInt(formData.policy_id));
   };
+
+  const selectedPolicy = selectedPolicyDetails || getSelectedPolicy();
 
   if (loadingPolicies) {
     return <Loading />;
@@ -226,26 +252,29 @@ const NewClaim = () => {
                 {policies.map(policy => (
                   <option key={policy.id} value={policy.id}>
                     {policy.policy_number} - {policy.insurance_type.toUpperCase()} 
-                    (Coverage: ${policy.sum_insured.toLocaleString()})
+                    (Coverage: ${policy.sum_insured ? policy.sum_insured.toLocaleString() : 'N/A'})
                   </option>
                 ))}
               </select>
               
-              {formData.policy_id && getSelectedPolicy() && (
+              {formData.policy_id && selectedPolicy && (
                 <div className="mt-3 p-3 bg-blue-50 rounded-lg text-sm">
                   <p className="text-gray-700">
                     <span className="font-medium">Policy Type:</span>{' '}
-                    {getSelectedPolicy().insurance_type.replace('_', ' ').toUpperCase()}
+                    {selectedPolicy.insurance_type?.replace('_', ' ').toUpperCase() || 'N/A'}
                   </p>
                   <p className="text-gray-700">
                     <span className="font-medium">Per Claim Limit:</span>{' '}
-                    ${getSelectedPolicy().per_claim_limit.toLocaleString()}
+                    ${selectedPolicy.per_claim_limit ? selectedPolicy.per_claim_limit.toLocaleString() : 'N/A'}
                   </p>
-                  {getSelectedPolicy().deductible > 0 && (
+                  {(selectedPolicy.deductible || 0) > 0 && (
                     <p className="text-gray-700">
                       <span className="font-medium">Deductible:</span>{' '}
-                      ${getSelectedPolicy().deductible.toLocaleString()}
+                      ${selectedPolicy.deductible ? selectedPolicy.deductible.toLocaleString() : 'N/A'}
                     </p>
+                  )}
+                  {loadingPolicyDetails && (
+                    <p className="text-gray-500 mt-2">Loading full policy details...</p>
                   )}
                 </div>
               )}

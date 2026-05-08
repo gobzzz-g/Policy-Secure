@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { policiesAPI } from '../services/api';
 import { Shield, Calendar, DollarSign, FileText, ChevronRight, Filter, Search, CheckCircle, Clock } from 'lucide-react';
@@ -159,10 +160,13 @@ const PoliciesList = () => {
               </div>
 
               <div className="pt-4 border-t border-surface-700/50">
-                <button className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-gradient-to-r from-primary-600 to-accent-violet text-white rounded-xl font-medium hover:shadow-glow transition-all group-hover:scale-105">
+                <Link
+                  to={`/policies/${policy.id}`}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-gradient-to-r from-primary-600 to-accent-violet text-white rounded-xl font-medium hover:shadow-glow transition-all group-hover:scale-105"
+                >
                   View Details
                   <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+                </Link>
               </div>
             </div>
 

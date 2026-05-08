@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Shield, Mail, Lock, ArrowRight, Sparkles, ArrowLeft } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -20,9 +21,11 @@ const LoginPage = () => {
 
     try {
       await login(email, password);
+      toast.success('Login successful!');
       navigate('/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
+      toast.error(error.response?.data?.detail || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }

@@ -120,6 +120,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     isAuthenticated: !!user,
     isPolicyholder: user?.role === 'policyholder',
+    isClaimsOfficer: user?.role === 'claims_officer',
     isFraudInvestigator: user?.role === 'fraud_investigator',
     isAdmin: user?.role === 'admin',
     isCustomerSupport: user?.role === 'customer_support',

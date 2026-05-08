@@ -19,7 +19,7 @@ if (!(Test-Path "backend\.env")) {
     exit 1
 }
 
-if (!(Test-Path ".venv")) {
+if (!(Test-Path "backend\venv")) {
     Write-Host "⚠ Virtual environment not found!" -ForegroundColor Red
     Write-Host "Please run backend setup first" -ForegroundColor Yellow
     exit 1
@@ -38,7 +38,7 @@ Write-Host ""
 
 # Start backend
 Write-Host "Starting Backend Server..." -ForegroundColor Yellow
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PWD'; .\.venv\Scripts\Activate.ps1; cd backend; uvicorn main:app --reload"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PWD'; .\backend\venv\Scripts\Activate.ps1; cd backend; uvicorn main:app --reload"
 Write-Host "✓ Backend starting at http://localhost:8000" -ForegroundColor Green
 
 # Wait a moment
