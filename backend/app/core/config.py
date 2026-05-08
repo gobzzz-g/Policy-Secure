@@ -28,7 +28,10 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
     # CORS
-    ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:8000"
+    ALLOWED_ORIGINS: str = (
+        "http://localhost:3000,http://localhost:8000,"
+        "https://policy-bae98.web.app,https://policy-bae98.firebaseapp.com"
+    )
     
     @property
     def allowed_origins_list(self) -> List[str]:
