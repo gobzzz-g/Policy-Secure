@@ -188,37 +188,37 @@ const NewClaim = () => {
   return (
     <div className="space-y-4 sm:space-y-6 max-w-4xl px-2 sm:px-0">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold">Submit New Claim</h1>
-        <p className="text-gray-600 mt-2 text-sm sm:text-base">
+        <h1 className="text-2xl sm:text-3xl font-bold gradient-text">Submit New Claim</h1>
+        <p className="text-surface-400 mt-2 text-sm sm:text-base">
           Fill out the form below to submit your insurance claim
         </p>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3">
-          <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+        <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-4 flex items-start space-x-3">
+          <AlertCircle className="h-5 w-5 text-rose-400 mt-0.5 flex-shrink-0" />
           <div>
-            <h3 className="text-sm font-medium text-red-800">Error</h3>
-            <p className="text-sm text-red-700 mt-1">{error}</p>
+            <h3 className="text-sm font-medium text-rose-300">Error</h3>
+            <p className="text-sm text-rose-400/90 mt-1">{error}</p>
           </div>
         </div>
       )}
 
       {success && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start space-x-3">
-          <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+        <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 flex items-start space-x-3">
+          <CheckCircle className="h-5 w-5 text-emerald-400 mt-0.5 flex-shrink-0" />
           <div>
-            <h3 className="text-sm font-medium text-green-800">Success</h3>
-            <p className="text-sm text-green-700 mt-1">{success}</p>
+            <h3 className="text-sm font-medium text-emerald-300">Success</h3>
+            <p className="text-sm text-emerald-400/90 mt-1">{success}</p>
           </div>
         </div>
       )}
 
       {policies.length === 0 ? (
-        <div className="card text-center py-12">
-          <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No Active Policies</h3>
-          <p className="text-gray-600 mb-4">
+        <div className="card-premium text-center py-12">
+          <AlertCircle className="h-12 w-12 text-surface-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-100 mb-2">No Active Policies</h3>
+          <p className="text-surface-400 mb-6">
             You need to have an active policy to submit a claim.
           </p>
           <button
@@ -231,21 +231,21 @@ const NewClaim = () => {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Policy Selection */}
-          <div className="card p-4 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center">
-              <FileText className="h-5 w-5 mr-2 text-blue-600" />
+          <div className="card-premium p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center text-gray-100">
+              <FileText className="h-5 w-5 mr-2 text-primary-400" />
               Policy Information
             </h2>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Select Policy <span className="text-red-500">*</span>
+              <label className="label">
+                Select Policy <span className="text-rose-500">*</span>
               </label>
               <select
                 name="policy_id"
                 value={formData.policy_id}
                 onChange={handleChange}
-                className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input pr-8"
                 required
               >
                 <option value="">-- Select a Policy --</option>
@@ -258,23 +258,23 @@ const NewClaim = () => {
               </select>
               
               {formData.policy_id && selectedPolicy && (
-                <div className="mt-3 p-3 bg-blue-50 rounded-lg text-sm">
-                  <p className="text-gray-700">
-                    <span className="font-medium">Policy Type:</span>{' '}
+                <div className="mt-3 p-4 bg-primary-500/10 border border-primary-500/20 rounded-xl text-sm">
+                  <p className="text-gray-300">
+                    <span className="font-medium text-white">Policy Type:</span>{' '}
                     {selectedPolicy.insurance_type?.replace('_', ' ').toUpperCase() || 'N/A'}
                   </p>
-                  <p className="text-gray-700">
-                    <span className="font-medium">Per Claim Limit:</span>{' '}
+                  <p className="text-gray-300">
+                    <span className="font-medium text-white">Per Claim Limit:</span>{' '}
                     ${selectedPolicy.per_claim_limit ? selectedPolicy.per_claim_limit.toLocaleString() : 'N/A'}
                   </p>
                   {(selectedPolicy.deductible || 0) > 0 && (
-                    <p className="text-gray-700">
-                      <span className="font-medium">Deductible:</span>{' '}
+                    <p className="text-gray-300">
+                      <span className="font-medium text-white">Deductible:</span>{' '}
                       ${selectedPolicy.deductible ? selectedPolicy.deductible.toLocaleString() : 'N/A'}
                     </p>
                   )}
                   {loadingPolicyDetails && (
-                    <p className="text-gray-500 mt-2">Loading full policy details...</p>
+                    <p className="text-surface-400 mt-2">Loading full policy details...</p>
                   )}
                 </div>
               )}
@@ -282,16 +282,16 @@ const NewClaim = () => {
           </div>
 
           {/* Incident Details */}
-          <div className="card">
-            <h2 className="text-xl font-semibold mb-4 flex items-center">
-              <Calendar className="h-5 w-5 mr-2 text-blue-600" />
+          <div className="card-premium">
+            <h2 className="text-xl font-semibold mb-4 flex items-center text-gray-100">
+              <Calendar className="h-5 w-5 mr-2 text-amber-400" />
               Incident Details
             </h2>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Incident Date <span className="text-red-500">*</span>
+                <label className="label">
+                  Incident Date <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -299,13 +299,13 @@ const NewClaim = () => {
                   value={formData.incident_date}
                   onChange={handleChange}
                   max={new Date().toISOString().split('T')[0]}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input cursor-pointer"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="label flex items-center">
                   <MapPin className="inline h-4 w-4 mr-1" />
                   Incident Location
                 </label>
@@ -315,13 +315,13 @@ const NewClaim = () => {
                   value={formData.incident_location}
                   onChange={handleChange}
                   placeholder="e.g., 123 Main Street, City, State"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Incident Description <span className="text-red-500">*</span>
+                <label className="label">
+                  Incident Description <span className="text-rose-500">*</span>
                 </label>
                 <textarea
                   name="incident_description"
@@ -329,11 +329,11 @@ const NewClaim = () => {
                   onChange={handleChange}
                   rows="6"
                   placeholder="Please provide a detailed description of what happened, including date, time, circumstances, and any other relevant information..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input"
                   required
                   minLength="10"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-surface-400 mt-1">
                   Minimum 10 characters. Be as detailed as possible.
                 </p>
               </div>
@@ -341,19 +341,19 @@ const NewClaim = () => {
           </div>
 
           {/* Financial Details */}
-          <div className="card">
-            <h2 className="text-xl font-semibold mb-4 flex items-center">
-              <DollarSign className="h-5 w-5 mr-2 text-blue-600" />
+          <div className="card-premium">
+            <h2 className="text-xl font-semibold mb-4 flex items-center text-gray-100">
+              <DollarSign className="h-5 w-5 mr-2 text-emerald-400" />
               Financial Details
             </h2>
             
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Claimed Amount <span className="text-red-500">*</span>
+                <label className="label">
+                  Claimed Amount <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-gray-500">₹</span>
+                  <span className="absolute left-4 top-3.5 text-surface-400">₹</span>
                   <input
                     type="number"
                     name="claimed_amount"
@@ -362,21 +362,21 @@ const NewClaim = () => {
                     min="0.01"
                     step="0.01"
                     placeholder="0.00"
-                    className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="input pl-8"
                     required
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-surface-400 mt-1">
                   Amount you are claiming
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Estimated Loss <span className="text-red-500">*</span>
+                <label className="label">
+                  Estimated Loss <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-gray-500">₹</span>
+                  <span className="absolute left-4 top-3.5 text-surface-400">₹</span>
                   <input
                     type="number"
                     name="estimated_loss"
@@ -385,11 +385,11 @@ const NewClaim = () => {
                     min="0.01"
                     step="0.01"
                     placeholder="0.00"
-                    className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="input pl-8"
                     required
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-surface-400 mt-1">
                   Total estimated loss or damage
                 </p>
               </div>
@@ -397,27 +397,27 @@ const NewClaim = () => {
           </div>
 
           {/* Witnesses */}
-          <div className="card">
-            <h2 className="text-xl font-semibold mb-4 flex items-center">
-              <Users className="h-5 w-5 mr-2 text-blue-600" />
+          <div className="card-premium">
+            <h2 className="text-xl font-semibold mb-4 flex items-center text-gray-100">
+              <Users className="h-5 w-5 mr-2 text-violet-400" />
               Witnesses (Optional)
             </h2>
             
             {formData.witnesses.length > 0 && (
               <div className="mb-4 space-y-2">
                 {formData.witnesses.map((w, index) => (
-                  <div key={index} className="flex items-start justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={index} className="flex items-start justify-between p-3 bg-surface-700 border border-surface-600 rounded-xl">
                     <div className="flex-1">
-                      <p className="font-medium text-gray-900">{w.name}</p>
-                      <p className="text-sm text-gray-600">{w.contact}</p>
+                      <p className="font-medium text-gray-100">{w.name}</p>
+                      <p className="text-sm text-surface-300">{w.contact}</p>
                       {w.statement && (
-                        <p className="text-sm text-gray-500 mt-1">{w.statement}</p>
+                        <p className="text-sm text-surface-400 mt-1">{w.statement}</p>
                       )}
                     </div>
                     <button
                       type="button"
                       onClick={() => removeWitness(index)}
-                      className="text-red-600 hover:text-red-800 text-sm font-medium ml-4"
+                      className="text-rose-500 hover:text-rose-400 text-sm font-medium ml-4 transition-colors"
                     >
                       Remove
                     </button>
@@ -434,7 +434,7 @@ const NewClaim = () => {
                   value={witness.name}
                   onChange={handleWitnessChange}
                   placeholder="Witness Name"
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input"
                 />
                 <input
                   type="text"
@@ -442,7 +442,7 @@ const NewClaim = () => {
                   value={witness.contact}
                   onChange={handleWitnessChange}
                   placeholder="Contact (Phone/Email)"
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="input"
                 />
               </div>
               <input
@@ -451,7 +451,7 @@ const NewClaim = () => {
                 value={witness.statement}
                 onChange={handleWitnessChange}
                 placeholder="Brief statement (optional)"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="input"
               />
               <button
                 type="button"
@@ -469,7 +469,7 @@ const NewClaim = () => {
             <button
               type="button"
               onClick={() => navigate('/claims')}
-              className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
+              className="btn btn-secondary px-6"
               disabled={loading}
             >
               Cancel

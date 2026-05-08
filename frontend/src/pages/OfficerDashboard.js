@@ -104,50 +104,50 @@ const OfficerDashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="card-premium hover:shadow-premium transition-all">
+        <div className="card-premium hover:shadow-glow transition-all group">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-surface-400">Assigned to Me</p>
-              <p className="text-3xl font-bold text-blue-400 mt-1">{stats.assignedToMe}</p>
+              <p className="text-3xl font-bold text-primary-400 mt-1">{stats.assignedToMe}</p>
             </div>
-            <div className="bg-blue-500/20 p-3 rounded-lg border border-blue-500/30">
-              <FileText className="h-6 w-6 text-blue-400" />
+            <div className="bg-primary-500/10 p-3 rounded-lg border border-primary-500/20 group-hover:bg-primary-500/20 transition-colors">
+              <FileText className="h-6 w-6 text-primary-400" />
             </div>
           </div>
         </div>
 
-        <div className="card-premium hover:shadow-premium transition-all">
+        <div className="card-premium hover:shadow-glow transition-all group">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-surface-400">Pending Review</p>
-              <p className="text-3xl font-bold text-yellow-400 mt-1">{stats.pendingReview}</p>
+              <p className="text-3xl font-bold text-amber-400 mt-1">{stats.pendingReview}</p>
             </div>
-            <div className="bg-yellow-500/20 p-3 rounded-lg border border-yellow-500/30">
-              <Clock className="h-6 w-6 text-yellow-400" />
+            <div className="bg-amber-500/10 p-3 rounded-lg border border-amber-500/20 group-hover:bg-amber-500/20 transition-colors">
+              <Clock className="h-6 w-6 text-amber-400" />
             </div>
           </div>
         </div>
 
-        <div className="card-premium hover:shadow-premium transition-all">
+        <div className="card-premium hover:shadow-glow transition-all group">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-surface-400">Reviewed Today</p>
               <p className="text-3xl font-bold text-emerald-400 mt-1">{stats.reviewedToday}</p>
             </div>
-            <div className="bg-emerald-500/20 p-3 rounded-lg border border-emerald-500/30">
+            <div className="bg-emerald-500/10 p-3 rounded-lg border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-colors">
               <CheckCircle className="h-6 w-6 text-emerald-400" />
             </div>
           </div>
         </div>
 
-        <div className="card-premium hover:shadow-premium transition-all">
+        <div className="card-premium hover:shadow-glow transition-all group">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-surface-400">Avg Processing Time</p>
-              <p className="text-3xl font-bold text-purple-400 mt-1">{stats.avgProcessingTime}d</p>
+              <p className="text-3xl font-bold text-accent-violet mt-1">{stats.avgProcessingTime}d</p>
             </div>
-            <div className="bg-purple-500/20 p-3 rounded-lg border border-purple-500/30">
-              <TrendingUp className="h-6 w-6 text-purple-400" />
+            <div className="bg-violet-500/10 p-3 rounded-lg border border-violet-500/20 group-hover:bg-violet-500/20 transition-colors">
+              <TrendingUp className="h-6 w-6 text-accent-violet" />
             </div>
           </div>
         </div>
