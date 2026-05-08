@@ -3,7 +3,7 @@ Configuration module for the Insurance Claims Platform.
 Handles all environment variables and application settings.
 """
 
-from pydantic_settings import BaseSettings
+from pydantic import BaseSettings
 from typing import List
 import os
 
